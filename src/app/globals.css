@@ -73,6 +73,10 @@ body {
   background-color: #ec4899;
   color: #ffffff;
 }
+.badge-purple {
+  background-color: #a855f7;
+  color: #ffffff;
+}
 
 /* Level colors */
 .level-green { color: #22c55e; }

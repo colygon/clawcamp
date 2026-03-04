@@ -41,6 +41,11 @@ const badgeIcons: Record<string, React.ReactNode> = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" />
     </svg>
   ),
+  assistant: (
+    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+    </svg>
+  ),
 };
 
 export default function Home() {
@@ -68,9 +73,9 @@ export default function Home() {
             </h1>
 
             <p className="text-xl text-nebius-text-muted max-w-2xl mb-10 leading-relaxed">
-              Five hands-on workshops designed for builders who want agents that actually run —
+              Six hands-on workshops and managed services for builders who want agents that actually run —
               not just sound impressive. From one-click cloud deploys to dedicated GPUs,
-              Kubernetes at scale, and robotics.
+              Kubernetes at scale, robotics, and fully managed personal AI assistants.
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -109,7 +114,7 @@ export default function Home() {
       <section className="border-b border-nebius-border bg-nebius-darker py-8">
         <div className="mx-auto max-w-7xl px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="text-center">
-            <div className="text-3xl font-bold text-white">5</div>
+            <div className="text-3xl font-bold text-white">6</div>
             <div className="text-sm text-nebius-text-muted mt-1">Workshops</div>
           </div>
           <div className="text-center">
@@ -132,7 +137,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">What to Expect</h2>
           <p className="text-lg text-nebius-text-muted max-w-2xl mb-12">
-            These aren&apos;t demo days. You&apos;ll leave each session with something working — not just ideas.
+            You will show off what you build. You&apos;ll leave each session with something working — not just ideas.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -148,7 +153,7 @@ export default function Home() {
               },
               {
                 title: "Real Workflows",
-                desc: "Content generation, lead scoring, market research, data analysis — choose your use case.",
+                desc: "Email automation, lead scoring, robotic arms, personal AI assistants, cloud deployments — choose your use case.",
                 icon: (
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
@@ -185,8 +190,8 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Workshops</h2>
           <p className="text-lg text-nebius-text-muted max-w-2xl mb-12">
-            Five tracks covering the full spectrum — from one-click cloud deploys to dedicated GPUs,
-            production Kubernetes, and physical robotics.
+            Six tracks covering the full spectrum — from one-click cloud deploys to dedicated GPUs,
+            production Kubernetes, physical robotics, and managed personal AI assistants.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -248,7 +253,7 @@ export default function Home() {
                   {sortedWorkshops.map((w) => (
                     <th key={w.slug} className="py-4 px-4 text-sm font-semibold text-white">
                       <Link href={`/workshops/${w.slug}`} className="hover:text-nebius-lime transition-colors">
-                        {w.slug === "robotics" ? "Robotics + SO-ARM100" : w.slug === "clawd-vm" ? "OpenClaw on Cloud VM" : w.title.split("+")[0].trim()}
+                        {w.slug === "robotics" ? "Robotics + SO-ARM100" : w.slug === "clawd-vm" ? "OpenClaw on Cloud VM" : w.slug === "personal-assistant" ? "Personal AI Assistant" : w.title.split("+")[0].trim()}
                       </Link>
                     </th>
                   ))}

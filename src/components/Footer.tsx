@@ -46,6 +46,7 @@ export default function Footer() {
               <li><Link href="/workshops/h200-gpu" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Dedicated H200 GPU</Link></li>
               <li><Link href="/workshops/kubernetes" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Kubernetes</Link></li>
               <li><Link href="/workshops/robotics" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Robotics + SO-ARM100</Link></li>
+              <li><Link href="/workshops/personal-assistant" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Personal AI Assistant</Link></li>
             </ul>
           </div>
 

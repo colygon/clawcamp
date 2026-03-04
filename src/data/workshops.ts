@@ -1387,4 +1387,236 @@ export const workshops: Workshop[] = [
       },
     ],
   },
+  {
+    slug: "personal-assistant",
+    badge: "Service",
+    badgeColor: "badge-purple",
+    title: "OpenClaw Personal AI Assistant — Managed Setup",
+    subtitle: "Your Own AI Assistant. Securely Set Up for You.",
+    tagline: "Skip the setup. We build your personal AI assistant in a 30-minute call.",
+    description:
+      "Get a fully configured OpenClaw personal AI assistant — managed and set up for you. It reads your inbox, manages your calendar, drafts replies, handles follow-ups, and works across WhatsApp, Telegram, Slack, and Teams. Connects to 15,000+ tools. Runs 24/7 so you don't have to.",
+    audience: "Executives, founders, operators, professionals",
+    level: "Beginner",
+    levelColor: "level-green",
+    keyValue: "Fully managed setup, 15,000+ integrations, 24/7 operation",
+    wowFactor: "\"It replied to 14 emails, booked 3 meetings, and I didn't open my laptop\"",
+    icon: "assistant",
+    whatYouBuild: [
+      "A fully configured personal AI assistant running on OpenClaw",
+      "Connected to your email, calendar, messaging apps, and 15,000+ tools",
+      "Custom workflows for inbox triage, meeting prep, follow-ups, and more",
+    ],
+    whatWeCover: [
+      "15-minute intro call to understand your workflow and priorities",
+      "30-minute managed setup session — we configure everything for you",
+      "Email and calendar integration (Gmail, Outlook, or custom IMAP)",
+      "Messaging setup: WhatsApp, Telegram, Slack, or Microsoft Teams",
+      "Custom automation: inbox triage, auto-drafts, meeting scheduling, follow-ups",
+      "Connecting to 15,000+ tools via OpenClaw's integration layer",
+      "30 days of included support and tuning after setup",
+    ],
+    whoIsThisFor:
+      "Busy professionals, executives, and founders who want a personal AI assistant without any technical setup. If you spend too much time on email, scheduling, and follow-ups — this is for you.",
+    prerequisites: [
+      "Access to your email account (Gmail, Outlook, or custom IMAP)",
+      "A messaging app you want connected (WhatsApp, Telegram, Slack, or Teams)",
+      "15 minutes for an intro call + 30 minutes for the setup session",
+      "No technical background required — we handle everything",
+    ],
+    youLeaveWith: [
+      "A fully working AI assistant reading and managing your inbox",
+      "Calendar integration with smart scheduling and meeting prep",
+      "Messaging connected on your preferred platform",
+      "Custom workflows tuned to your priorities",
+      "30 days of included support and optimization",
+    ],
+    schedule: [
+      {
+        time: "15 min",
+        title: "Intro Call — Understand Your Workflow",
+        description: "Quick call to map out your priorities and daily workflow",
+        details: [
+          "What does your typical day look like?",
+          "Which tools and platforms do you use most?",
+          "What tasks take up the most time? (email, scheduling, follow-ups)",
+          "Set expectations for what the assistant will handle",
+        ],
+      },
+      {
+        time: "30 min",
+        title: "Managed Setup Session",
+        description: "We configure your OpenClaw assistant live on a call",
+        details: [
+          "Connect email account (Gmail, Outlook, or IMAP)",
+          "Link calendar for scheduling and meeting prep",
+          "Set up messaging integration (WhatsApp, Telegram, Slack, or Teams)",
+          "Configure inbox triage rules, auto-draft preferences, and follow-up cadence",
+        ],
+      },
+      {
+        time: "Day 1–7",
+        title: "Tuning & Optimization",
+        description: "Your assistant learns your style and preferences",
+        details: [
+          "Review auto-drafted emails and fine-tune tone and style",
+          "Adjust scheduling preferences and availability windows",
+          "Add priority contacts and VIP routing rules",
+          "Connect additional tools from the 15,000+ integration library",
+        ],
+      },
+      {
+        time: "Day 8–30",
+        title: "Ongoing Support & Expansion",
+        description: "Included support to expand automations and troubleshoot",
+        details: [
+          "Slack or email support for any questions or adjustments",
+          "Add new workflows as you discover more tasks to automate",
+          "Performance review: how many hours is your assistant saving?",
+          "Optional upgrade to Enterprise for team-wide deployment",
+        ],
+      },
+    ],
+    guideSteps: [
+      {
+        stepNumber: 1,
+        title: "Book Your Intro Call",
+        duration: "2 min",
+        overview:
+          "Schedule a 15-minute intro call so we can understand your workflow, priorities, and which tools you use daily.",
+        instructions: [
+          "Click the Register Now button to book your intro call",
+          "Choose a time that works for you (available 7 days a week)",
+          "Fill in a quick form about your current tools and biggest time sinks",
+          "You'll receive a confirmation email with the call link",
+        ],
+        tips: [
+          "Think about which tasks eat up the most time in your day — email, scheduling, follow-ups?",
+          "Have a list of tools you currently use (email provider, calendar, messaging apps)",
+          "No technical prep needed — just show up and tell us what you need",
+        ],
+        checkpoint: "You have a confirmed intro call scheduled.",
+      },
+      {
+        stepNumber: 2,
+        title: "Intro Call — Map Your Workflow",
+        duration: "15 min",
+        overview:
+          "On the call, we'll map out your daily workflow and identify the highest-impact automations for your assistant.",
+        instructions: [
+          "Join the call at your scheduled time",
+          "Walk us through your typical day — email, meetings, messaging, follow-ups",
+          "Tell us which platforms you use (Gmail/Outlook, WhatsApp/Slack/Telegram/Teams)",
+          "We'll recommend a setup plan tailored to your workflow",
+        ],
+        tips: [
+          "The more detail you share about your day, the better we can configure your assistant",
+          "Don't worry about technical details — we handle all of that",
+          "If you manage a team, mention it — we can set up delegation workflows",
+        ],
+        checkpoint: "You have a clear setup plan and a scheduled setup session.",
+      },
+      {
+        stepNumber: 3,
+        title: "Managed Setup — Email & Calendar",
+        duration: "15 min",
+        overview:
+          "We connect your email and calendar to OpenClaw and configure inbox triage, auto-drafting, and smart scheduling.",
+        instructions: [
+          "Join the setup call — screen share is optional but helpful",
+          "Authorize your email account (Gmail, Outlook, or IMAP)",
+          "Connect your calendar for scheduling and meeting prep",
+          "Set inbox triage rules: VIP contacts, priority labels, auto-archive",
+          "Configure auto-draft preferences: tone, length, signature",
+        ],
+        commands: [
+          "# No commands needed — we handle setup on our end",
+          "# You'll just authorize access via OAuth or app password",
+        ],
+        tips: [
+          "Gmail and Outlook connect in one click via OAuth",
+          "Custom IMAP works too — just have your server details handy",
+          "Calendar integration enables meeting prep summaries and smart scheduling",
+        ],
+        checkpoint: "Your email and calendar are connected and OpenClaw is triaging your inbox.",
+      },
+      {
+        stepNumber: 4,
+        title: "Managed Setup — Messaging Integration",
+        duration: "10 min",
+        overview:
+          "Connect your preferred messaging platform so you can interact with your assistant via chat.",
+        instructions: [
+          "Choose your messaging platform: WhatsApp, Telegram, Slack, or Microsoft Teams",
+          "Follow the authorization flow (we guide you through it)",
+          "Test a quick message to your assistant",
+          "Configure notification preferences and response style",
+        ],
+        tips: [
+          "WhatsApp is the most popular choice for personal use",
+          "Slack and Teams work great for professionals who live in those tools",
+          "You can connect multiple platforms — your assistant syncs across all of them",
+        ],
+        checkpoint: "You can message your assistant and get a response on your chosen platform.",
+      },
+      {
+        stepNumber: 5,
+        title: "Custom Workflows & Automations",
+        duration: "5 min",
+        overview:
+          "Set up custom automations — follow-up sequences, meeting prep, report generation, and connections to 15,000+ tools.",
+        instructions: [
+          "Review the workflow templates we recommend based on your intro call",
+          "Enable follow-up reminders for emails that need a response",
+          "Set up meeting prep: your assistant sends you a briefing before each call",
+          "Connect additional tools (CRM, project management, docs) from the integration library",
+        ],
+        tips: [
+          "Start with 2–3 core workflows and expand over the first week",
+          "The 15,000+ tool library includes Salesforce, HubSpot, Notion, Asana, Google Docs, and more",
+          "Your assistant can chain tools together — e.g., 'when I get an email from a lead, update the CRM and schedule a follow-up'",
+        ],
+        checkpoint: "Your custom workflows are active and running.",
+      },
+      {
+        stepNumber: 6,
+        title: "Test Drive — First 24 Hours",
+        duration: "Ongoing",
+        overview:
+          "Let your assistant run for 24 hours. Review its work, tweak preferences, and see the time savings add up.",
+        instructions: [
+          "Go about your day as normal — your assistant is working in the background",
+          "Check your drafts folder to review auto-drafted emails",
+          "Look at your calendar for any meetings your assistant scheduled or prepped",
+          "Message your assistant to ask it to do something ('draft a reply to John', 'schedule lunch with Sarah')",
+        ],
+        tips: [
+          "Don't micromanage the first day — let it work and review at the end of the day",
+          "Flag anything that feels off (tone, priority, routing) so we can tune it",
+          "Most clients see 2–3 hours saved in the first week",
+        ],
+        checkpoint: "Your assistant has handled real tasks for 24 hours and you've reviewed its work.",
+      },
+      {
+        stepNumber: 7,
+        title: "Tuning & Ongoing Support",
+        duration: "30 days included",
+        overview:
+          "We're available for 30 days after setup to tune your assistant, add workflows, and make sure it's saving you time.",
+        instructions: [
+          "Reach out via Slack or email anytime in the first 30 days",
+          "Request new workflows or adjustments to existing ones",
+          "Review your assistant's performance: emails handled, meetings scheduled, follow-ups sent",
+          "Explore the Enterprise plan if you want to deploy assistants for your team",
+        ],
+        tips: [
+          "The Starter plan ($999 one-time) includes one personal assistant with 30 days support",
+          "Enterprise ($4,999) covers up to 5 assistants for your team",
+          "After 30 days, ongoing support is available at $249/month",
+          "Your assistant keeps running 24/7 — support is just for changes and optimization",
+        ],
+        checkpoint: "Your assistant is fully tuned, running 24/7, and you know how to request changes.",
+      },
+    ],
+  },
 ];
