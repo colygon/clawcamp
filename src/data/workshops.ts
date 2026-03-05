@@ -878,7 +878,7 @@ export const workshops: Workshop[] = [
     tagline:
       "Use Solo CLI to control robotic arms, record datasets, train VLA models on Nebius GPUs, and run inference — all wired through Nebius Serverless + Token Factory.",
     description:
-      "Use Solo CLI (github.com/GetSoloTech/solo-cli) to work with real robotic hardware — SO-101, Koch, LeKiwi, and more. Calibrate arms, teleoperate, record training datasets, and train vision-language-action (VLA) models like ACT, Pi0, SmolVLA, and GROOT N1.5 on Nebius GPUs. Then deploy your trained policy behind Nebius Serverless + Token Factory for cloud-based inference. Motors are already set up — you start with calibration and go.",
+      "Use Solo CLI to work with real robotic hardware — SO-101, Koch, LeKiwi, OpenDroid (Realman R1D2), Unitree G1, and Booster. Calibrate arms, teleoperate, record training datasets, and train vision-language-action (VLA) models like ACT, Pi0, SmolVLA, and GROOT N1.5 on Nebius GPUs. Then deploy your trained policy behind Nebius Serverless + Token Factory for cloud-based inference. Motors are already set up — you start with calibration and go. Full Solo CLI docs at github.com/GetSoloTech/solo-cli.",
     audience:
       "Robotics-curious developers, hardware hackers, AI engineers who want to bridge digital and physical",
     level: "Intermediate",
@@ -894,10 +894,10 @@ export const workshops: Workshop[] = [
       "A trained VLA policy (ACT, Pi0, or SmolVLA) deployed on Nebius for inference",
     ],
     whatWeCover: [
-      "Solo CLI: one tool for calibration, teleoperation, recording, training, and inference (github.com/GetSoloTech/solo-cli)",
-      "Supported robots: SO-101, Koch, LeKiwi, OpenDroid (Realman R1D2), Unitree G1, Booster",
-      "VLA models: ACT, Pi0, Pi0Fast, SmolVLA, GROOT N1.5 — what they are and when to use each",
-      "Recording imitation learning datasets with 'solo robo --record'",
+      "Solo CLI: one tool for calibration, teleoperation, recording, training, and inference — github.com/GetSoloTech/solo-cli (docs: github.com/GetSoloTech/solo-cli/blob/main/solo/commands/robots/lerobot/README.md)",
+      "Supported robots: SO-101, Koch, LeKiwi, OpenDroid (Realman R1D2), Unitree G1, Booster — each with official docs and LeRobot integration",
+      "VLA models: ACT, Pi0, Pi0Fast, Pi05, SmolVLA, GROOT N1.5, X-VLA — what they are, when to use each, and how to train them",
+      "Recording imitation learning datasets with 'solo robo --record' and the LeRobot framework (github.com/huggingface/lerobot)",
       "Training VLA policies on Nebius GPUs via Token Factory",
       "Deploying trained models on Nebius Serverless for cloud-based robotic inference",
     ],
@@ -995,6 +995,8 @@ export const workshops: Workshop[] = [
         tips: [
           "Solo CLI requires Python 3.12+. If you're on an older version, use 'uv python install 3.12' first.",
           "The 'solo setup' command saves your config to ~/.solo/config.json — it remembers your hardware and preferences.",
+          "Full Solo CLI docs: https://github.com/GetSoloTech/solo-cli/blob/main/solo/commands/robots/lerobot/README.md",
+          "LeRobot framework (used under the hood): https://github.com/huggingface/lerobot",
         ],
         checkpoint:
           "Running 'solo status' shows your system info and 'nebius iam whoami' returns your user info.",
@@ -1021,7 +1023,10 @@ export const workshops: Workshop[] = [
         tips: [
           "Motors are already set up — skip motor setup and go straight to calibration.",
           "During calibration, move each joint to its limit when prompted. This sets the workspace boundaries.",
-          "For SO-101 docs: https://docs.huggingface.co/lerobot — for Koch: check the LeRobot GitHub.",
+          "SO-101 official docs: https://huggingface.co/docs/lerobot/en/so101",
+          "Koch official docs: https://huggingface.co/docs/lerobot/en/koch",
+          "LeKiwi official docs: https://huggingface.co/docs/lerobot/en/lekiwi (assembly guide: https://wiki.seeedstudio.com/lerobot_lekiwi/)",
+          "OpenDroid (Realman R1D2) quick start: https://develop.realman-robotics.com/en/robot/quickUseManual/",
         ],
         checkpoint:
           "Calibration completes without errors and you can teleoperate the arm smoothly.",
@@ -1051,6 +1056,7 @@ export const workshops: Workshop[] = [
         tips: [
           "Aim for 10-20 episodes for a basic task. Consistency matters more than volume — try to perform the task the same way each time.",
           "Include slight variations (object positions, angles) so the model generalizes rather than memorizing one trajectory.",
+          "LeRobot GitHub (dataset format & tools): https://github.com/huggingface/lerobot",
         ],
         checkpoint:
           "You have 10+ recorded episodes and replay shows clean, consistent trajectories.",
@@ -1110,9 +1116,11 @@ export const workshops: Workshop[] = [
           "solo robo --train -y",
         ],
         tips: [
-          "ACT trains in minutes and works great for single-task policies. Start here.",
-          "SmolVLA is more capable but takes longer to train — good for multi-task learning.",
-          "Other VLA models to explore later: Pi0, Pi0Fast, GROOT N1.5, X-VLA. See the LeRobot GitHub for implementations.",
+          "ACT trains in minutes and works great for single-task policies. Start here. Paper: https://tonyzhaozh.github.io/aloha/ | Code: https://github.com/tonyzhaozh/act | LeRobot: https://huggingface.co/docs/lerobot/en/act",
+          "SmolVLA is more capable but takes longer to train — good for multi-task learning. Docs: https://huggingface.co/blog/smolvla",
+          "Pi0 / Pi0Fast / Pi05 — Physical Intelligence foundation models. Paper: https://www.pi.website/blog/pi0 | Code: https://github.com/Physical-Intelligence/openpi | LeRobot: https://huggingface.co/docs/lerobot/en/pi0",
+          "GROOT N1.5 — NVIDIA's VLA model. Paper: https://research.nvidia.com/labs/gear/gr00t-n1_5/ | Code: https://github.com/NVIDIA/Isaac-GR00T | LeRobot: https://huggingface.co/docs/lerobot/en/groot",
+          "X-VLA — Paper: https://arxiv.org/pdf/2510.10274 | LeRobot: https://huggingface.co/docs/lerobot/en/xvla",
         ],
         checkpoint:
           "Training completes and the loss curve shows convergence. Your model checkpoint is saved.",
@@ -1167,8 +1175,10 @@ export const workshops: Workshop[] = [
         ],
         tips: [
           "The best demos show the full loop: teleoperation → training → autonomous execution.",
-          "Other robots to explore: LeKiwi (mobile base + arm), OpenDroid R1D2 (full robotic arm), Unitree G1 (humanoid). Each works with Solo CLI.",
-          "VLA models to try next: Pi0 (foundation model), GROOT N1.5 (NVIDIA), X-VLA. All have LeRobot implementations.",
+          "Other robots to explore: LeKiwi (https://huggingface.co/docs/lerobot/en/lekiwi), OpenDroid R1D2 (https://develop.realman-robotics.com/en/robot/quickUseManual/), Unitree G1 (https://huggingface.co/docs/lerobot/en/unitree_g1), Booster (https://www.booster.tech/open-source/). Each works with Solo CLI.",
+          "Unitree G1 extras: SDK (https://github.com/unitreerobotics/unitree_sdk2_python), Replay (https://github.com/GetSoloTech/unitree-g1-replay), IsaacLab Sim (https://github.com/unitreerobotics/unitree_sim_isaaclab), GROOT Wholebody Control (https://github.com/NVlabs/GR00T-WholeBodyControl)",
+          "OpenDroid programming guide (teach pendant, ROS, APIs): https://develop.realman-robotics.com/en/robot/teachingPendant/armTeching/",
+          "All VLA model LeRobot implementations: ACT (https://huggingface.co/docs/lerobot/en/act), Pi0 (https://huggingface.co/docs/lerobot/en/pi0), Pi0Fast (https://huggingface.co/docs/lerobot/en/pi0fast), Pi05 (https://huggingface.co/docs/lerobot/en/pi05), GROOT (https://huggingface.co/docs/lerobot/en/groot), X-VLA (https://huggingface.co/docs/lerobot/en/xvla), SmolVLA (https://huggingface.co/blog/smolvla)",
         ],
         checkpoint:
           "You have a video of autonomous execution and your model + config saved for future use.",
