@@ -26,6 +26,29 @@ const icons: Record<string, React.ReactNode> = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-5.1-5.1m0 0L3.07 12.9a1.5 1.5 0 001.06 2.56h1.5m-1.5-2.56l6.36-6.36m5.1 5.1l5.1-5.1m0 0L17.93 7.1a1.5 1.5 0 00-1.06 2.56h-1.5m1.5-2.56l-6.36 6.36M12 21a9 9 0 110-18 9 9 0 010 18z" />
     </svg>
   ),
+  lekiwi: (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+      <circle cx="7" cy="18" r="2" />
+      <circle cx="17" cy="18" r="2" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 16h14v-5a2 2 0 00-2-2H7a2 2 0 00-2 2v5zM12 9V5m-2 0h4" />
+    </svg>
+  ),
+  opendroid: (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 20v-4m-3 4h6M12 16l-5-5V7a1 1 0 011-1h8a1 1 0 011 1v4l-5 5zM9 6V3m6 3V3" />
+    </svg>
+  ),
+  booster: (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 10h12M6 10l-2 7m2-7V7h12v3M18 10l2 7M4 17h2m12 0h2M8 10v7m8-7v7M10 7V5h4v2" />
+    </svg>
+  ),
+  unitree: (
+    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+      <circle cx="12" cy="4" r="2" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v5m-4-1h8M8 10l-2 6m2-6v7M16 10l2 6m-2-6v7" />
+    </svg>
+  ),
 };
 
 export default function WorkshopPage({ workshop }: { workshop: Workshop }) {

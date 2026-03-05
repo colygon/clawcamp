@@ -22,7 +22,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {/* Tailwind safelist: dynamic classes used in workshop data */}
-        <div className="hidden bg-nebius-lime bg-nebius-blue bg-nebius-cyan bg-nebius-pink bg-nebius-purple text-nebius-navy text-nebius-lime text-nebius-green text-nebius-blue text-nebius-orange text-nebius-pink text-nebius-cyan text-nebius-purple bg-nebius-lime/10 bg-nebius-lime/20 border-nebius-lime/20 bg-nebius-lime-hover bg-nebius-lime-dim from-nebius-lime from-nebius-lime-dim" aria-hidden="true" />
+        <div className="hidden bg-nebius-lime bg-nebius-blue bg-nebius-cyan bg-nebius-pink bg-nebius-purple bg-nebius-orange bg-nebius-green text-nebius-navy text-nebius-lime text-nebius-green text-nebius-blue text-nebius-orange text-nebius-pink text-nebius-cyan text-nebius-purple text-nebius-red bg-nebius-lime/10 bg-nebius-lime/20 border-nebius-lime/20 bg-nebius-lime-hover bg-nebius-lime-dim from-nebius-lime from-nebius-lime-dim" aria-hidden="true" />
         {children}
       </body>
     </html>

@@ -77,9 +77,23 @@ body {
   background-color: #a855f7;
   color: #ffffff;
 }
+.badge-green {
+  background-color: #22c55e;
+  color: #0A1628;
+}
+.badge-orange {
+  background-color: #f97316;
+  color: #0A1628;
+}
+.badge-red {
+  background-color: #ef4444;
+  color: #ffffff;
+}
 
 /* Level colors */
 .level-green { color: #22c55e; }
 .level-blue { color: #3b82f6; }
 .level-orange { color: #f97316; }
 .level-pink { color: #ec4899; }
+.level-purple { color: #a855f7; }
+.level-red { color: #ef4444; }

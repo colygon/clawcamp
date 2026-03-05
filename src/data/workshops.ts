@@ -1185,4 +1185,1129 @@ export const workshops: Workshop[] = [
       },
     ],
   },
+  {
+    slug: "lekiwi",
+    badge: "Workshop",
+    badgeColor: "badge-green",
+    title: "LeKiwi — Mobile Robot Imitation Learning",
+    subtitle:
+      "Wheels + Arms. Navigate. Grasp. Train. Deploy.",
+    tagline:
+      "Build a mobile manipulation robot that navigates, grasps, and learns — all from Solo CLI + Nebius.",
+    description:
+      "LeKiwi combines a wheeled mobile base with an SO-101 robotic arm, creating a platform for mobile manipulation. Use Solo CLI to calibrate, teleoperate, record imitation learning datasets, and train VLA models that handle navigation + grasping. Deploy your trained policy on Nebius Serverless + Token Factory for cloud inference. Assembly docs at wiki.seeedstudio.com/lerobot_lekiwi/ and official docs at huggingface.co/docs/lerobot/en/lekiwi.",
+    audience:
+      "Developers interested in mobile robotics, navigation + manipulation, and imitation learning",
+    level: "Intermediate",
+    levelColor: "level-green",
+    keyValue:
+      "Mobile manipulation pipeline: navigate + grasp with a single trained VLA model",
+    wowFactor:
+      '"The robot drove to the block, picked it up, and brought it back — all from one model I trained in this session"',
+    icon: "lekiwi",
+    whatYouBuild: [
+      "A calibrated LeKiwi mobile robot with teleoperation via Solo CLI",
+      "A recorded dataset of mobile manipulation episodes (navigate + grasp)",
+      "A trained VLA policy deployed on Nebius for autonomous mobile manipulation",
+    ],
+    whatWeCover: [
+      "LeKiwi hardware: SO-101 arm on a wheeled base — calibration and teleoperation (https://huggingface.co/docs/lerobot/en/lekiwi)",
+      "Assembly & setup with 3D printing files and guides (https://wiki.seeedstudio.com/lerobot_lekiwi/)",
+      "Solo CLI for mobile robots: calibration, teleop, recording, and training with LeKiwi-specific configs",
+      "Recording mobile manipulation datasets — navigation + grasping in single episodes",
+      "Training VLA models (ACT, SmolVLA) for mobile manipulation on Nebius GPUs",
+      "LeRobot framework integration for dataset management and model training (https://github.com/huggingface/lerobot)",
+    ],
+    whoIsThisFor:
+      "Developers who want to go beyond stationary arms and build robots that move AND manipulate. Great for anyone interested in home robotics, warehouse automation, or mobile AI agents. LeKiwi is beginner-friendly but the mobile manipulation challenge adds real depth.",
+    prerequisites: [
+      "Laptop with Python 3.12+ and terminal access",
+      "A Nebius AI Cloud account (we'll help you set one up if needed)",
+      "Basic comfort with Python and CLI tools",
+    ],
+    youLeaveWith: [
+      "A calibrated LeKiwi you can teleoperate from Solo CLI",
+      "A recorded dataset of mobile manipulation episodes",
+      "A trained VLA model for autonomous navigation + grasping",
+      "Inference running on Nebius Serverless + Token Factory",
+      "Video of your LeKiwi performing a mobile manipulation task autonomously",
+    ],
+    schedule: [
+      {
+        time: "12:00 PM – 12:30 PM",
+        title: "LeKiwi Setup & Calibration",
+        description:
+          "Meet the LeKiwi, calibrate the arm and base, and test teleoperation",
+        details: [
+          "LeKiwi hardware overview: SO-101 arm + wheeled mobile base",
+          "Install Solo CLI and run calibration for both arm and wheels",
+          "Test teleoperation — drive the base and control the arm simultaneously",
+        ],
+      },
+      {
+        time: "12:30 PM – 1:15 PM",
+        title: "Record Mobile Manipulation Data",
+        description:
+          "Teleoperate LeKiwi through navigate-and-grasp tasks, recording training episodes",
+        details: [
+          "Design a mobile manipulation task: drive to object → pick up → return",
+          "Record 15-20 episodes with Solo CLI, varying start positions and object locations",
+          "Replay episodes to verify trajectory quality and consistency",
+          "Understand what makes good mobile manipulation data vs. stationary arm data",
+        ],
+      },
+      {
+        time: "1:15 PM – 2:00 PM",
+        title: "Train & Deploy Your Mobile Policy",
+        description:
+          "Train a VLA model on mobile manipulation data and deploy for autonomous inference",
+        details: [
+          "Choose ACT or SmolVLA for your mobile manipulation policy",
+          "Train on Nebius GPUs via Token Factory",
+          "Deploy to Nebius Serverless for cloud-based inference",
+          "Run autonomous inference — watch LeKiwi navigate and grasp without teleoperation",
+        ],
+      },
+      {
+        time: "2:00 PM – 2:30 PM",
+        title: "Multi-Task & Show-and-Tell",
+        description:
+          "Try multi-task learning and demo your autonomous LeKiwi",
+        details: [
+          "Record a second task and combine both into one multi-task model",
+          "Compare model performance on seen vs. unseen object positions",
+          "Record a video of autonomous mobile manipulation",
+          "Share your demo with the group",
+        ],
+      },
+    ],
+    guideSteps: [
+      {
+        stepNumber: 1,
+        title: "Install Solo CLI",
+        duration: "5 min",
+        overview:
+          "Install Solo CLI and configure it for LeKiwi hardware.",
+        instructions: [
+          "Clone and install Solo CLI (requires Python 3.12+ and uv)",
+          "Run interactive setup and select LeKiwi when prompted",
+          "Verify Solo CLI detects the connected hardware",
+        ],
+        commands: [
+          "# Install Solo CLI",
+          "git clone https://github.com/GetSoloTech/solo-cli.git",
+          "cd solo-cli && uv pip install -e .",
+          "",
+          "# Or from PyPI",
+          "uv pip install solo-cli",
+          "",
+          "# Run setup (select LeKiwi)",
+          "solo setup",
+        ],
+        tips: [
+          "Solo CLI docs: https://github.com/GetSoloTech/solo-cli/blob/main/solo/commands/robots/lerobot/README.md",
+          "LeKiwi official docs: https://huggingface.co/docs/lerobot/en/lekiwi",
+          "Assembly & setup guide with 3D printing files: https://wiki.seeedstudio.com/lerobot_lekiwi/",
+        ],
+        checkpoint:
+          "Running 'solo status' shows your LeKiwi hardware detected.",
+      },
+      {
+        stepNumber: 2,
+        title: "Calibrate Arm & Base",
+        duration: "10 min",
+        overview:
+          "Calibrate the SO-101 arm joints and the wheeled base. Motors are already set up — you just need to calibrate the coordinate systems.",
+        instructions: [
+          "Run full calibration for both arm and mobile base",
+          "Follow on-screen prompts to set joint limits for the arm",
+          "Calibrate wheel encoders for accurate navigation",
+          "Test with a short teleoperation session — drive and grab simultaneously",
+        ],
+        commands: [
+          "# Calibrate all (arm + base)",
+          "solo robo --calibrate all",
+          "",
+          "# Test teleoperation",
+          "solo robo --teleop",
+        ],
+        tips: [
+          "Motors are pre-configured — skip motor setup and go straight to calibration.",
+          "Test driving in a figure-8 to verify wheel calibration accuracy.",
+          "SO-101 arm docs: https://huggingface.co/docs/lerobot/en/so101",
+        ],
+        checkpoint:
+          "Calibration completes and you can teleoperate both arm and base smoothly.",
+      },
+      {
+        stepNumber: 3,
+        title: "Record Mobile Manipulation Episodes",
+        duration: "15 min",
+        overview:
+          "Teleoperate LeKiwi to navigate to objects, pick them up, and carry them back. Record 15-20 episodes for training.",
+        instructions: [
+          "Set up a simple task: drive to a colored block, pick it up, return to start",
+          "Start recording with Solo CLI — describe the task when prompted",
+          "Perform 15-20 episodes, varying start positions and block locations",
+          "Replay episodes to check for smooth, consistent trajectories",
+        ],
+        commands: [
+          "# Record episodes",
+          "solo robo --record",
+          "",
+          "# Skip prompts with saved settings",
+          "solo robo --record -y",
+          "",
+          "# Replay to verify",
+          "solo robo --replay",
+        ],
+        tips: [
+          "Mobile manipulation needs more episodes than stationary tasks — aim for 15-20.",
+          "Vary starting position and object location between episodes for better generalization.",
+          "LeRobot GitHub (dataset format): https://github.com/huggingface/lerobot",
+        ],
+        checkpoint:
+          "You have 15+ recorded episodes with clean navigation + grasping trajectories.",
+      },
+      {
+        stepNumber: 4,
+        title: "Set Up Nebius Infrastructure",
+        duration: "10 min",
+        overview:
+          "Deploy the OpenClaw orchestrator on Nebius Serverless and configure Token Factory for GPU training.",
+        instructions: [
+          "Install and authenticate with the Nebius CLI",
+          "Deploy the orchestrator on Nebius Serverless (CPU-only)",
+          "Configure Token Factory API key for GPU-backed training",
+        ],
+        commands: [
+          "# Install Nebius CLI",
+          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "nebius auth login",
+          "",
+          "# Deploy orchestrator",
+          "export AUTH_TOKEN=$(openssl rand -hex 32)",
+          "nebius msp serverless v1alpha1 endpoint create \\",
+          "  --name openclaw-lekiwi \\",
+          "  --container-image openclaw:robotics \\",
+          "  --container-template-resources-platform cpu-d3 \\",
+          "  --container-template-resources-preset 4vcpu-16gb \\",
+          "  --port 8080 \\",
+          "  --username admin \\",
+          "  --password \"$AUTH_TOKEN\" \\",
+          "  --network-id <your-network-id> \\",
+          "  --parent-id <your-project-id>",
+          "",
+          "# Set Token Factory key",
+          "export TF_API_KEY=<your-token-factory-api-key>",
+        ],
+        checkpoint:
+          "Serverless endpoint is active and Token Factory API key is configured.",
+      },
+      {
+        stepNumber: 5,
+        title: "Train Your Mobile Manipulation Model",
+        duration: "15 min",
+        overview:
+          "Train a VLA model on your LeKiwi episodes. The model learns both navigation and manipulation from your demos.",
+        instructions: [
+          "Choose ACT (fast) or SmolVLA (more capable) as your policy",
+          "Launch training with Solo CLI",
+          "Monitor training progress and wait for convergence",
+          "Evaluate on held-out episodes",
+        ],
+        commands: [
+          "# Train VLA policy",
+          "solo robo --train",
+          "",
+          "# With saved settings",
+          "solo robo --train -y",
+        ],
+        tips: [
+          "ACT is recommended for first mobile manipulation models — trains fast and handles navigation well. Paper: https://tonyzhaozh.github.io/aloha/",
+          "SmolVLA handles multi-task better if you plan to combine navigate + grasp + place. Docs: https://huggingface.co/blog/smolvla",
+        ],
+        checkpoint:
+          "Training completes with converged loss. Model checkpoint saved.",
+      },
+      {
+        stepNumber: 6,
+        title: "Run Autonomous Mobile Manipulation",
+        duration: "10 min",
+        overview:
+          "Watch LeKiwi autonomously navigate to an object, pick it up, and bring it back — no teleoperation, just your trained model.",
+        instructions: [
+          "Load your trained model checkpoint",
+          "Run inference with Solo CLI",
+          "Place objects at new positions and test generalization",
+          "Compare autonomous behavior to your original teleoperation",
+        ],
+        commands: [
+          "# Autonomous inference",
+          "solo robo --inference",
+          "",
+          "# Skip prompts",
+          "solo robo --inference -y",
+        ],
+        tips: [
+          "The magic moment: watching LeKiwi drive to a block, grab it, and return — all autonomously.",
+          "If generalization is poor, record 5-10 more episodes with wider position variety.",
+        ],
+        checkpoint:
+          "LeKiwi autonomously navigates to objects and performs the manipulation task.",
+      },
+      {
+        stepNumber: 7,
+        title: "Record Demo & Explore Extensions",
+        duration: "10 min",
+        overview:
+          "Capture video of your autonomous LeKiwi and try multi-task extensions.",
+        instructions: [
+          "Record a video showing the full autonomous mobile manipulation loop",
+          "Try a second task (sorting, stacking) and record additional episodes",
+          "Save your model checkpoint and deployment config",
+          "Share your video with the group",
+        ],
+        commands: [
+          "# Check status",
+          "solo status",
+          "",
+          "# List models",
+          "solo list",
+        ],
+        tips: [
+          "Best demo: side-by-side of teleoperation vs. autonomous execution.",
+          "LeKiwi assembly docs: https://wiki.seeedstudio.com/lerobot_lekiwi/",
+          "LeRobot GitHub: https://github.com/huggingface/lerobot",
+        ],
+        checkpoint:
+          "You have a video of autonomous mobile manipulation and saved model/config.",
+      },
+    ],
+  },
+  {
+    slug: "opendroid",
+    badge: "Workshop",
+    badgeColor: "badge-purple",
+    title: "OpenDroid R1D2 — Industrial Arm Programming",
+    subtitle:
+      "Teach Pendant. ROS. Python API. Imitation Learning.",
+    tagline:
+      "Program a full industrial robotic arm with teach pendant, ROS, Python APIs, and VLA-powered imitation learning.",
+    description:
+      "The OpenDroid (Realman R1D2) is a production-grade robotic arm with teach pendant, ROS support, and multi-language APIs (C, C++, Python). In this workshop you'll set up the arm, program it via the teach pendant, control it programmatically with the Python API, and then use Solo CLI to record imitation learning datasets and train VLA models. Deploy your trained policy on Nebius Serverless + Token Factory. Full docs at develop.realman-robotics.com.",
+    audience:
+      "Robotics engineers, ROS developers, developers interested in industrial-grade arms",
+    level: "Intermediate",
+    levelColor: "level-purple",
+    keyValue:
+      "Industrial arm with multiple control modes: teach pendant, ROS, Python API, and VLA inference",
+    wowFactor:
+      '"I programmed an industrial arm with the teach pendant, then trained a VLA model that replicated the task autonomously"',
+    icon: "opendroid",
+    whatYouBuild: [
+      "An operational OpenDroid R1D2 arm controlled via teach pendant and Python API",
+      "A recorded imitation learning dataset from teleoperation sessions",
+      "A trained VLA model deployed on Nebius for autonomous arm control",
+    ],
+    whatWeCover: [
+      "OpenDroid hardware setup and quick start (https://develop.realman-robotics.com/en/robot/quickUseManual/)",
+      "Teach pendant operation: teach positions, create motion sequences, and save programs",
+      "Programming guide: ROS support, Python/C/C++ APIs, Gazebo/MoveIt simulation (https://develop.realman-robotics.com/en/robot/teachingPendant/armTeching/)",
+      "Solo CLI integration: calibration, teleoperation, and recording with R1D2 (https://github.com/GetSoloTech/solo-cli)",
+      "Training VLA models (ACT, SmolVLA) for industrial pick-and-place tasks",
+      "Deploying trained models on Nebius Serverless for cloud-based arm control",
+    ],
+    whoIsThisFor:
+      "Robotics engineers who want to work with industrial-grade hardware. Great for ROS developers, manufacturing engineers, or anyone interested in bridging traditional robotics programming with modern imitation learning. The R1D2 supports multiple programming paradigms so you can use the approach that fits your background.",
+    prerequisites: [
+      "Laptop with Python 3.12+ and terminal access",
+      "A Nebius AI Cloud account (we'll help you set one up if needed)",
+      "Basic comfort with Python — ROS experience is helpful but not required",
+    ],
+    youLeaveWith: [
+      "An operational OpenDroid R1D2 you can control via teach pendant and Python API",
+      "A recorded dataset of teleoperation episodes",
+      "A trained VLA model for autonomous pick-and-place",
+      "Inference running on Nebius Serverless + Token Factory",
+      "Python scripts for programmatic arm control",
+    ],
+    schedule: [
+      {
+        time: "12:00 PM – 12:30 PM",
+        title: "OpenDroid Setup & Teach Pendant",
+        description:
+          "Set up the R1D2, learn teach pendant basics, and teach your first motion sequence",
+        details: [
+          "OpenDroid R1D2 hardware overview and safety guidelines",
+          "Teach pendant basics: teach positions, waypoints, and motion sequences",
+          "Save and replay a teach pendant program",
+        ],
+      },
+      {
+        time: "12:30 PM – 1:15 PM",
+        title: "Python API & Imitation Learning Recording",
+        description:
+          "Control the arm programmatically and record teleoperation datasets with Solo CLI",
+        details: [
+          "Python API basics: connect, move to position, read joint states",
+          "Switch to Solo CLI for imitation learning: calibrate and teleoperate",
+          "Record 10-15 pick-and-place episodes for VLA training",
+          "Replay episodes to verify data quality",
+        ],
+      },
+      {
+        time: "1:15 PM – 2:00 PM",
+        title: "Train VLA & Deploy",
+        description:
+          "Train a VLA model on your recorded data and deploy for autonomous inference",
+        details: [
+          "Train ACT or SmolVLA on your pick-and-place dataset",
+          "Deploy trained model on Nebius Serverless + Token Factory",
+          "Run autonomous inference — watch R1D2 execute tasks without teach pendant",
+          "Compare teach pendant accuracy vs. VLA model accuracy",
+        ],
+      },
+      {
+        time: "2:00 PM – 2:30 PM",
+        title: "ROS Integration & Show-and-Tell",
+        description:
+          "Explore ROS support, simulation, and demo your autonomous arm",
+        details: [
+          "Overview of ROS integration, Gazebo simulation, and MoveIt planning",
+          "Run a Gazebo simulation of your trained policy (optional)",
+          "Record a video of autonomous execution",
+          "Show-and-tell: demo your workflow to the group",
+        ],
+      },
+    ],
+    guideSteps: [
+      {
+        stepNumber: 1,
+        title: "Set Up the OpenDroid R1D2",
+        duration: "5 min",
+        overview:
+          "Power on the R1D2, connect to the teach pendant, and verify the arm responds to manual commands.",
+        instructions: [
+          "Follow the quick start guide to power on the R1D2",
+          "Connect the teach pendant and verify communication",
+          "Test manual joint movement via the teach pendant",
+        ],
+        commands: [
+          "# Install Solo CLI (for later steps)",
+          "git clone https://github.com/GetSoloTech/solo-cli.git",
+          "cd solo-cli && uv pip install -e .",
+          "",
+          "# Run setup (select OpenDroid/R1D2)",
+          "solo setup",
+        ],
+        tips: [
+          "Quick start guide: https://develop.realman-robotics.com/en/robot/quickUseManual/",
+          "Solo CLI docs: https://github.com/GetSoloTech/solo-cli/blob/main/solo/commands/robots/lerobot/README.md",
+        ],
+        checkpoint:
+          "The R1D2 powers on, teach pendant connects, and you can move joints manually.",
+      },
+      {
+        stepNumber: 2,
+        title: "Teach Pendant Programming",
+        duration: "10 min",
+        overview:
+          "Use the teach pendant to teach positions, create waypoint sequences, and save reusable programs.",
+        instructions: [
+          "Teach 3-5 waypoint positions by physically guiding the arm",
+          "Create a motion sequence that visits each waypoint in order",
+          "Save the program and replay it automatically",
+          "Adjust speed and smoothing parameters",
+        ],
+        tips: [
+          "Teaching & programming guide: https://develop.realman-robotics.com/en/robot/teachingPendant/armTeching/",
+          "Start with simple point-to-point moves before complex trajectories.",
+          "The teach pendant supports online programming, joint/Cartesian moves, and more.",
+        ],
+        checkpoint:
+          "You have a saved teach pendant program that replays a multi-waypoint sequence.",
+      },
+      {
+        stepNumber: 3,
+        title: "Python API Control",
+        duration: "10 min",
+        overview:
+          "Control the R1D2 programmatically using the Python API. Connect, read joint states, and command movements.",
+        instructions: [
+          "Install the Realman Python SDK",
+          "Connect to the arm and read current joint positions",
+          "Send joint-space and Cartesian-space move commands",
+          "Build a simple pick-and-place script",
+        ],
+        commands: [
+          "# Install Realman Python SDK",
+          "pip install robotic-arm-package",
+          "",
+          "# Example: connect and read joints",
+          "python -c \"",
+          "from robotic_arm.rm_robot_interface import *",
+          "robot = RoboticArm(rm_thread_mode_e.RM_TRIPLE_MODE_E)",
+          "handle = robot.rm_create_robot_arm('192.168.1.18', 8080)",
+          "joints = robot.rm_get_joint_degree()",
+          "print(joints)\"",
+        ],
+        tips: [
+          "API docs (C, C++, Python): https://develop.realman-robotics.com/en/robot/teachingPendant/armTeching/",
+          "The Python API supports joint-space, Cartesian-space, and trajectory-based control.",
+        ],
+        checkpoint:
+          "You can read joint positions and send move commands from Python.",
+      },
+      {
+        stepNumber: 4,
+        title: "Record Imitation Learning Data",
+        duration: "15 min",
+        overview:
+          "Switch to Solo CLI and record teleoperation episodes for VLA training. Perform pick-and-place tasks 10-15 times.",
+        instructions: [
+          "Calibrate the R1D2 with Solo CLI",
+          "Start teleoperation and perform pick-and-place tasks",
+          "Record 10-15 episodes, varying object positions",
+          "Replay episodes to verify data quality",
+        ],
+        commands: [
+          "# Calibrate (motors already set up)",
+          "solo robo --calibrate all",
+          "",
+          "# Teleoperate",
+          "solo robo --teleop",
+          "",
+          "# Record episodes",
+          "solo robo --record",
+          "",
+          "# Replay to verify",
+          "solo robo --replay",
+        ],
+        tips: [
+          "Aim for 10-15 episodes for pick-and-place. Consistency matters more than volume.",
+          "LeRobot GitHub: https://github.com/huggingface/lerobot",
+        ],
+        checkpoint:
+          "You have 10+ recorded episodes with clean pick-and-place trajectories.",
+      },
+      {
+        stepNumber: 5,
+        title: "Deploy Nebius + Train VLA",
+        duration: "15 min",
+        overview:
+          "Set up Nebius Serverless, deploy the orchestrator, and train a VLA model on your recorded dataset.",
+        instructions: [
+          "Install Nebius CLI and authenticate",
+          "Deploy the OpenClaw orchestrator on Serverless",
+          "Train ACT or SmolVLA on your recorded dataset",
+          "Evaluate the trained model",
+        ],
+        commands: [
+          "# Install Nebius CLI",
+          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "nebius auth login",
+          "",
+          "# Deploy orchestrator",
+          "export AUTH_TOKEN=$(openssl rand -hex 32)",
+          "nebius msp serverless v1alpha1 endpoint create \\",
+          "  --name openclaw-opendroid \\",
+          "  --container-image openclaw:robotics \\",
+          "  --container-template-resources-platform cpu-d3 \\",
+          "  --container-template-resources-preset 4vcpu-16gb \\",
+          "  --port 8080 \\",
+          "  --username admin \\",
+          "  --password \"$AUTH_TOKEN\" \\",
+          "  --network-id <your-network-id> \\",
+          "  --parent-id <your-project-id>",
+          "",
+          "# Train VLA",
+          "solo robo --train",
+        ],
+        tips: [
+          "ACT paper: https://tonyzhaozh.github.io/aloha/ | LeRobot: https://huggingface.co/docs/lerobot/en/act",
+          "SmolVLA: https://huggingface.co/blog/smolvla",
+        ],
+        checkpoint:
+          "Training completes with converged loss and model checkpoint is saved.",
+      },
+      {
+        stepNumber: 6,
+        title: "Run Autonomous Inference",
+        duration: "10 min",
+        overview:
+          "Deploy your trained model and watch the R1D2 execute pick-and-place autonomously.",
+        instructions: [
+          "Load your trained model checkpoint",
+          "Run inference with Solo CLI",
+          "Compare VLA accuracy vs. your teach pendant program",
+          "Test with objects at new positions",
+        ],
+        commands: [
+          "# Autonomous inference",
+          "solo robo --inference",
+          "",
+          "# Skip prompts",
+          "solo robo --inference -y",
+        ],
+        tips: [
+          "Compare teach pendant precision vs. VLA model adaptability — they solve different problems.",
+          "Teach pendant is precise but brittle; VLA models generalize to new positions.",
+        ],
+        checkpoint:
+          "R1D2 executes pick-and-place autonomously from your trained VLA model.",
+      },
+      {
+        stepNumber: 7,
+        title: "Record Demo & Explore ROS",
+        duration: "10 min",
+        overview:
+          "Capture video, explore ROS/Gazebo integration, and save your configurations.",
+        instructions: [
+          "Record a video of autonomous pick-and-place",
+          "Explore ROS integration and Gazebo/MoveIt simulation (optional)",
+          "Save model checkpoint, API scripts, and teach pendant programs",
+          "Share your demo with the group",
+        ],
+        commands: [
+          "# Check status",
+          "solo status",
+          "",
+          "# List models",
+          "solo list",
+        ],
+        tips: [
+          "Programming guide (ROS, Gazebo, MoveIt): https://develop.realman-robotics.com/en/robot/teachingPendant/armTeching/",
+          "The R1D2 supports Gazebo simulation — great for testing policies before running on hardware.",
+        ],
+        checkpoint:
+          "You have a video, saved scripts, and model checkpoint for future use.",
+      },
+    ],
+  },
+  {
+    slug: "booster",
+    badge: "Workshop",
+    badgeColor: "badge-orange",
+    title: "Booster — Quadruped Robot Control & RL",
+    subtitle:
+      "Walk. Run. Learn. Simulate. Deploy.",
+    tagline:
+      "Control a quadruped robot, train locomotion policies with RL, and simulate in Isaac Lab — powered by Nebius GPUs.",
+    description:
+      "The Booster is a quadruped robot platform for locomotion research and reinforcement learning. In this workshop you'll set up the Booster SDK, control the robot with programmatic commands, train RL locomotion policies in Isaac Lab simulation on Nebius GPUs, and deploy trained policies to the physical robot. Full SDK docs at booster.tech/open-source/.",
+    audience:
+      "RL researchers, robotics engineers, developers interested in legged locomotion",
+    level: "Advanced",
+    levelColor: "level-orange",
+    keyValue:
+      "Sim-to-real quadruped locomotion: train in Isaac Lab, deploy to physical hardware",
+    wowFactor:
+      '"I trained a locomotion policy in simulation and transferred it to a real quadruped — it walked on the first try"',
+    icon: "booster",
+    whatYouBuild: [
+      "A Booster quadruped robot responding to locomotion commands",
+      "An RL-trained locomotion policy in Isaac Lab simulation on Nebius GPUs",
+      "A sim-to-real transfer pipeline deploying simulation policies to physical hardware",
+    ],
+    whatWeCover: [
+      "Booster SDK setup: robot control, RL training, and Isaac Lab simulation (https://www.booster.tech/open-source/)",
+      "Quadruped control basics: gait patterns, velocity commands, and balance",
+      "Isaac Lab simulation: setting up environments, training RL policies, and sim-to-real transfer",
+      "Reinforcement learning for locomotion: reward design, PPO training, and policy evaluation",
+      "Deploying trained policies from simulation to the physical Booster robot",
+      "Cloud-based RL training on Nebius GPUs via Token Factory for fast iteration",
+    ],
+    whoIsThisFor:
+      "RL researchers, robotics engineers, and developers fascinated by legged locomotion. You should be comfortable with Python and interested in reinforcement learning. Prior RL experience helps but isn't required — we cover the concepts as we build.",
+    prerequisites: [
+      "Laptop with Python 3.12+ and terminal access",
+      "A Nebius AI Cloud account (we'll help you set one up if needed)",
+      "Comfort with Python — RL experience is helpful but not required",
+    ],
+    youLeaveWith: [
+      "A Booster quadruped responding to your locomotion commands",
+      "An RL-trained locomotion policy from Isaac Lab simulation",
+      "A sim-to-real pipeline for deploying simulation policies",
+      "Cloud RL training setup on Nebius GPUs",
+      "Video of your quadruped walking with a learned policy",
+    ],
+    schedule: [
+      {
+        time: "12:00 PM – 12:30 PM",
+        title: "Booster SDK Setup & Robot Control",
+        description:
+          "Install the Booster SDK, connect to the robot, and test basic locomotion commands",
+        details: [
+          "Booster quadruped hardware overview and safety guidelines",
+          "Install the Booster SDK from the open-source repo",
+          "Test basic locomotion: walk forward, turn, change gait speed",
+        ],
+      },
+      {
+        time: "12:30 PM – 1:15 PM",
+        title: "Isaac Lab Simulation & RL Training",
+        description:
+          "Set up an Isaac Lab environment and train a locomotion policy with RL on Nebius GPUs",
+        details: [
+          "Isaac Lab overview: physics simulation, environments, and observations",
+          "Configure a locomotion task environment for the Booster",
+          "Design a reward function: forward velocity, stability, energy efficiency",
+          "Launch RL training (PPO) on Nebius GPUs via Token Factory",
+        ],
+      },
+      {
+        time: "1:15 PM – 2:00 PM",
+        title: "Sim-to-Real Transfer",
+        description:
+          "Transfer your trained policy from simulation to the physical Booster robot",
+        details: [
+          "Export the trained policy from Isaac Lab",
+          "Configure the sim-to-real pipeline for the Booster",
+          "Deploy the policy and test on the physical robot",
+          "Debug and tune: what changes between sim and real",
+        ],
+      },
+      {
+        time: "2:00 PM – 2:30 PM",
+        title: "Advanced Gaits & Show-and-Tell",
+        description:
+          "Experiment with advanced gaits, terrain adaptation, and demo your walking robot",
+        details: [
+          "Try different reward functions for varied gaits (trot, gallop, bound)",
+          "Test on different terrain (slopes, bumps) if available",
+          "Record a video of your quadruped walking with learned policies",
+          "Show-and-tell: demo your workflow to the group",
+        ],
+      },
+    ],
+    guideSteps: [
+      {
+        stepNumber: 1,
+        title: "Install Booster SDK",
+        duration: "5 min",
+        overview:
+          "Install the Booster open-source SDK for robot control and RL training.",
+        instructions: [
+          "Clone the Booster SDK from the open-source repo",
+          "Install dependencies",
+          "Verify the SDK can connect to the robot",
+        ],
+        commands: [
+          "# Clone Booster SDK",
+          "git clone https://github.com/BoosterRobotics/booster_robotics_sdk.git",
+          "cd booster_robotics_sdk",
+          "pip install -e .",
+          "",
+          "# Verify connection",
+          "python -c \"import booster_robotics_sdk; print('SDK ready')\"",
+        ],
+        tips: [
+          "Full SDK docs: https://www.booster.tech/open-source/",
+          "The SDK covers robot control, RL training, and Isaac Lab simulation in one package.",
+        ],
+        checkpoint:
+          "Booster SDK is installed and can detect the connected robot.",
+      },
+      {
+        stepNumber: 2,
+        title: "Basic Robot Control",
+        duration: "10 min",
+        overview:
+          "Send locomotion commands to the Booster: walk forward, turn, stop. Understand the control interface.",
+        instructions: [
+          "Connect to the Booster robot via the SDK",
+          "Send velocity commands: forward, backward, turn left/right",
+          "Adjust gait speed and observe the robot's behavior",
+          "Test emergency stop and safety features",
+        ],
+        tips: [
+          "Start with slow velocities and increase gradually.",
+          "The Booster uses velocity commands (vx, vy, vyaw) for locomotion control.",
+        ],
+        checkpoint:
+          "You can command the Booster to walk, turn, and stop reliably.",
+      },
+      {
+        stepNumber: 3,
+        title: "Set Up Isaac Lab Simulation",
+        duration: "10 min",
+        overview:
+          "Configure an Isaac Lab simulation environment for the Booster. This is where you'll train RL policies before deploying to the real robot.",
+        instructions: [
+          "Set up Isaac Lab with the Booster robot model",
+          "Configure the locomotion task environment",
+          "Run a test simulation to verify physics and rendering",
+          "Define observations, actions, and initial conditions",
+        ],
+        tips: [
+          "Isaac Lab provides GPU-accelerated physics simulation for fast RL training.",
+          "The Booster model includes accurate joint limits, masses, and friction parameters.",
+        ],
+        checkpoint:
+          "Isaac Lab runs with the Booster model and you can see the simulated robot.",
+      },
+      {
+        stepNumber: 4,
+        title: "Deploy Nebius GPUs for RL Training",
+        duration: "10 min",
+        overview:
+          "Set up Nebius cloud infrastructure for GPU-accelerated RL training. Isaac Lab + PPO on H200 GPUs trains orders of magnitude faster than local.",
+        instructions: [
+          "Install and authenticate with the Nebius CLI",
+          "Configure Token Factory for GPU compute",
+          "Set up the training environment on Nebius",
+        ],
+        commands: [
+          "# Install Nebius CLI",
+          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "nebius auth login",
+          "",
+          "# Set Token Factory key for GPU training",
+          "export TF_API_KEY=<your-token-factory-api-key>",
+        ],
+        checkpoint:
+          "Nebius CLI authenticated and Token Factory API key configured.",
+      },
+      {
+        stepNumber: 5,
+        title: "Train RL Locomotion Policy",
+        duration: "15 min",
+        overview:
+          "Design a reward function and train a PPO locomotion policy in Isaac Lab on Nebius GPUs.",
+        instructions: [
+          "Design the reward function: forward velocity bonus, stability penalty, energy penalty",
+          "Configure PPO hyperparameters (learning rate, batch size, epochs)",
+          "Launch training on Nebius GPUs",
+          "Monitor training curves: reward, episode length, velocity tracking",
+        ],
+        tips: [
+          "A good reward function balances forward progress with energy efficiency and stability.",
+          "PPO with ~1000 parallel environments converges in minutes on Nebius GPUs.",
+          "Start simple (forward walking) then add complexity (turning, speed variation).",
+        ],
+        checkpoint:
+          "Training converges and the simulated Booster walks stably with your trained policy.",
+      },
+      {
+        stepNumber: 6,
+        title: "Sim-to-Real Transfer",
+        duration: "10 min",
+        overview:
+          "Export your trained policy from Isaac Lab and deploy it to the physical Booster robot.",
+        instructions: [
+          "Export the trained policy checkpoint from Isaac Lab",
+          "Load the policy on the Booster SDK",
+          "Deploy to the physical robot and test walking",
+          "Compare sim performance vs. real performance — tune if needed",
+        ],
+        tips: [
+          "Sim-to-real transfer works best with domain randomization during training.",
+          "Expect some tuning — friction and motor dynamics differ between sim and real.",
+        ],
+        checkpoint:
+          "The physical Booster walks using your RL-trained policy from simulation.",
+      },
+      {
+        stepNumber: 7,
+        title: "Record Demo & Advanced Gaits",
+        duration: "10 min",
+        overview:
+          "Record video of your walking robot, experiment with different gaits, and save your configurations.",
+        instructions: [
+          "Record a video of the Booster walking with your trained policy",
+          "Try different reward functions for varied gaits (optional)",
+          "Save your policy, reward function, and training config",
+          "Share your demo with the group",
+        ],
+        tips: [
+          "Best demo: side-by-side of simulation vs. real robot walking.",
+          "Booster open-source docs: https://www.booster.tech/open-source/",
+        ],
+        checkpoint:
+          "You have a video of your quadruped walking and all configs saved.",
+      },
+    ],
+  },
+  {
+    slug: "unitree-g1",
+    badge: "Workshop",
+    badgeColor: "badge-red",
+    title: "Unitree G1 — Humanoid Loco-Manipulation",
+    subtitle:
+      "Walk. Reach. Grasp. Whole-Body Control.",
+    tagline:
+      "Control a humanoid robot with GROOT whole-body control, joint replay, and Isaac Lab simulation on Nebius GPUs.",
+    description:
+      "The Unitree G1 is a full humanoid robot capable of walking, reaching, and grasping. In this workshop you'll set up the Unitree SDK, replay recorded joint trajectories, run GROOT whole-body control policies, and train in Isaac Lab simulation on Nebius GPUs. Use LeRobot integration for imitation learning and deploy inference on Nebius Serverless + Token Factory. Full docs at huggingface.co/docs/lerobot/en/unitree_g1.",
+    audience:
+      "Robotics engineers, humanoid enthusiasts, researchers in whole-body control and loco-manipulation",
+    level: "Advanced",
+    levelColor: "level-red",
+    keyValue:
+      "Humanoid whole-body control: walking + manipulation with GROOT policies on Nebius GPUs",
+    wowFactor:
+      '"I watched a humanoid walk to a table, pick up an object, and carry it — running a policy I deployed in this session"',
+    icon: "unitree",
+    whatYouBuild: [
+      "A Unitree G1 humanoid executing joint trajectory replays",
+      "GROOT whole-body control policies for loco-manipulation tasks",
+      "An Isaac Lab simulation pipeline for humanoid policy training on Nebius GPUs",
+    ],
+    whatWeCover: [
+      "Unitree G1 setup: LeRobot docs for connection, calibration, and gr00t_wbc locomotion (https://huggingface.co/docs/lerobot/en/unitree_g1)",
+      "Unitree SDK: Python API for motor control and sensor reading (https://github.com/unitreerobotics/unitree_sdk2_python)",
+      "Joint trajectory recording and replay with the Unitree G1 Replay tool (https://github.com/GetSoloTech/unitree-g1-replay)",
+      "GROOT Whole-Body Control: loco-manipulation policies, teleoperation stack, data export (https://github.com/NVlabs/GR00T-WholeBodyControl)",
+      "Isaac Lab simulation: train humanoid policies in GPU-accelerated sim (https://github.com/unitreerobotics/unitree_sim_isaaclab)",
+      "VLA model training (GROOT N1.5, ACT) for humanoid tasks on Nebius GPUs",
+    ],
+    whoIsThisFor:
+      "Robotics engineers and researchers who want to work with humanoid robots. Great for anyone interested in whole-body control, loco-manipulation, or sim-to-real transfer for bipedal platforms. This is advanced hardware — but the tooling (LeRobot, GROOT, Isaac Lab) makes it approachable.",
+    prerequisites: [
+      "Laptop with Python 3.12+ and terminal access",
+      "A Nebius AI Cloud account (we'll help you set one up if needed)",
+      "Comfort with Python and robotics concepts — some RL/ML experience is helpful",
+    ],
+    youLeaveWith: [
+      "A Unitree G1 executing joint trajectory replays",
+      "GROOT whole-body control policies running on the humanoid",
+      "An Isaac Lab simulation for policy training on Nebius GPUs",
+      "VLA-trained policies deployed on Nebius Serverless + Token Factory",
+      "Video of the humanoid performing a loco-manipulation task",
+    ],
+    schedule: [
+      {
+        time: "12:00 PM – 12:30 PM",
+        title: "Unitree G1 Setup & Joint Replay",
+        description:
+          "Connect to the G1, set up the SDK, and test joint trajectory recording and replay",
+        details: [
+          "Unitree G1 humanoid hardware overview and safety protocols",
+          "Install Unitree SDK and connect to the robot",
+          "Record and replay joint trajectories — the foundation for all control methods",
+        ],
+      },
+      {
+        time: "12:30 PM – 1:15 PM",
+        title: "GROOT Whole-Body Control",
+        description:
+          "Deploy GROOT whole-body control policies for walking + manipulation",
+        details: [
+          "GROOT WBC overview: loco-manipulation policies and the teleoperation stack",
+          "Deploy a pre-trained GROOT policy on the G1",
+          "Test walking, reaching, and grasping with whole-body coordination",
+          "Record demonstrations via the GROOT data exporter",
+        ],
+      },
+      {
+        time: "1:15 PM – 2:00 PM",
+        title: "Isaac Lab Simulation & Training",
+        description:
+          "Train custom humanoid policies in Isaac Lab simulation on Nebius GPUs",
+        details: [
+          "Set up the Unitree G1 in Isaac Lab with GPU-accelerated physics",
+          "Train a locomotion policy with RL on Nebius GPUs",
+          "Train a loco-manipulation policy using GROOT + Isaac Lab data",
+          "Evaluate in simulation before deploying to the real robot",
+        ],
+      },
+      {
+        time: "2:00 PM – 2:30 PM",
+        title: "Sim-to-Real & Show-and-Tell",
+        description:
+          "Transfer policies to the real G1 and demo your humanoid",
+        details: [
+          "Deploy trained policies from Isaac Lab to the physical G1",
+          "Compare simulation behavior vs. real-world performance",
+          "Record a video of the G1 performing a loco-manipulation task",
+          "Show-and-tell: demo your workflow to the group",
+        ],
+      },
+    ],
+    guideSteps: [
+      {
+        stepNumber: 1,
+        title: "Install Unitree SDK & Tools",
+        duration: "5 min",
+        overview:
+          "Install the Unitree SDK, the G1 Replay tool, and connect to the humanoid.",
+        instructions: [
+          "Install the Unitree Python SDK",
+          "Install the G1 Replay tool for joint trajectory recording",
+          "Connect to the G1 and verify communication",
+        ],
+        commands: [
+          "# Install Unitree SDK",
+          "pip install unitree-sdk2-python",
+          "",
+          "# Clone G1 Replay tool",
+          "git clone https://github.com/GetSoloTech/unitree-g1-replay.git",
+          "cd unitree-g1-replay && pip install -e .",
+          "",
+          "# Verify connection",
+          "python -c \"import unitree_sdk2py; print('SDK ready')\"",
+        ],
+        tips: [
+          "Unitree SDK docs: https://github.com/unitreerobotics/unitree_sdk2_python",
+          "G1 Replay tool: https://github.com/GetSoloTech/unitree-g1-replay",
+          "LeRobot docs for Unitree: https://huggingface.co/docs/lerobot/en/unitree_g1",
+        ],
+        checkpoint:
+          "SDK installed, G1 Replay tool ready, and you can ping the G1.",
+      },
+      {
+        stepNumber: 2,
+        title: "Joint Trajectory Recording & Replay",
+        duration: "10 min",
+        overview:
+          "Record motor joint trajectories by manually guiding the G1, then replay them. This is the simplest form of humanoid programming.",
+        instructions: [
+          "Put the G1 in teach mode to allow manual joint movement",
+          "Record a simple arm movement trajectory",
+          "Replay the recorded trajectory autonomously",
+          "Record a more complex sequence (reach + grasp)",
+        ],
+        commands: [
+          "# Record trajectory",
+          "python record_trajectory.py --robot g1 --output trajectory.json",
+          "",
+          "# Replay trajectory",
+          "python replay_trajectory.py --robot g1 --input trajectory.json",
+        ],
+        tips: [
+          "Joint replay is deterministic — great for repetitive tasks at fixed positions.",
+          "For adaptive behavior (varying positions), you'll need GROOT or VLA policies.",
+        ],
+        checkpoint:
+          "You can record and replay joint trajectories on the G1.",
+      },
+      {
+        stepNumber: 3,
+        title: "Deploy GROOT Whole-Body Control",
+        duration: "15 min",
+        overview:
+          "Set up NVIDIA's GROOT Whole-Body Control stack for loco-manipulation — walk, reach, and grasp with full-body coordination.",
+        instructions: [
+          "Clone the GROOT WholeBody Control repository",
+          "Install dependencies and configure for the G1",
+          "Deploy a pre-trained GROOT policy",
+          "Test walking, reaching, and grasping with whole-body control",
+        ],
+        commands: [
+          "# Clone GROOT WBC",
+          "git clone https://github.com/NVlabs/GR00T-WholeBodyControl.git",
+          "cd GR00T-WholeBodyControl",
+          "pip install -e .",
+          "",
+          "# Deploy pre-trained policy on G1",
+          "python deploy.py --robot unitree_g1 --policy pretrained_wbc",
+        ],
+        tips: [
+          "GROOT WBC repo: https://github.com/NVlabs/GR00T-WholeBodyControl",
+          "GROOT provides whole-body control policies, a teleoperation stack, and a data exporter.",
+          "The teleoperation stack is useful for recording demonstrations for VLA training.",
+        ],
+        checkpoint:
+          "The G1 walks and performs reaching motions with GROOT whole-body control.",
+      },
+      {
+        stepNumber: 4,
+        title: "Set Up Isaac Lab Simulation",
+        duration: "10 min",
+        overview:
+          "Configure Isaac Lab with the Unitree G1 model for GPU-accelerated policy training on Nebius.",
+        instructions: [
+          "Clone the Unitree Isaac Lab simulation repo",
+          "Install Isaac Lab and configure for the G1",
+          "Set up Nebius GPU access for training",
+          "Run a test simulation to verify physics",
+        ],
+        commands: [
+          "# Clone Unitree Isaac Lab sim",
+          "git clone https://github.com/unitreerobotics/unitree_sim_isaaclab.git",
+          "cd unitree_sim_isaaclab && pip install -e .",
+          "",
+          "# Install Nebius CLI",
+          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "nebius auth login",
+          "",
+          "# Set Token Factory for GPU training",
+          "export TF_API_KEY=<your-token-factory-api-key>",
+        ],
+        tips: [
+          "Isaac Lab sim repo: https://github.com/unitreerobotics/unitree_sim_isaaclab",
+          "Isaac Lab supports data collection, playback, generation, and model validation.",
+        ],
+        checkpoint:
+          "Isaac Lab runs with the G1 model and you can see the simulated humanoid.",
+      },
+      {
+        stepNumber: 5,
+        title: "Train Humanoid Policies",
+        duration: "15 min",
+        overview:
+          "Train locomotion and loco-manipulation policies in Isaac Lab on Nebius GPUs using RL and/or GROOT data.",
+        instructions: [
+          "Configure a locomotion task in Isaac Lab",
+          "Train a walking policy with PPO on Nebius GPUs",
+          "Optionally: use GROOT-exported demonstrations for imitation learning",
+          "Evaluate the trained policy in simulation",
+        ],
+        tips: [
+          "GROOT N1.5 paper: https://research.nvidia.com/labs/gear/gr00t-n1_5/",
+          "GROOT N1.5 code: https://github.com/NVIDIA/Isaac-GR00T",
+          "LeRobot GROOT implementation: https://huggingface.co/docs/lerobot/en/groot",
+          "Parallel environments in Isaac Lab dramatically speed up RL training.",
+        ],
+        checkpoint:
+          "Your trained policy walks stably in simulation.",
+      },
+      {
+        stepNumber: 6,
+        title: "Sim-to-Real Transfer",
+        duration: "10 min",
+        overview:
+          "Export your trained policy from Isaac Lab and deploy it to the physical G1 humanoid.",
+        instructions: [
+          "Export the policy checkpoint from Isaac Lab",
+          "Deploy to the G1 via the Unitree SDK",
+          "Test walking and manipulation on the physical robot",
+          "Compare sim vs. real performance and tune parameters",
+        ],
+        tips: [
+          "Domain randomization during sim training improves real-world transfer.",
+          "Start with locomotion-only before adding manipulation.",
+        ],
+        checkpoint:
+          "The physical G1 executes your trained policy.",
+      },
+      {
+        stepNumber: 7,
+        title: "Record Demo & Save Configs",
+        duration: "10 min",
+        overview:
+          "Capture video of your humanoid robot, save all configurations, and share your demo.",
+        instructions: [
+          "Record a video of the G1 performing with your trained policy",
+          "Save policy checkpoints, training configs, and deployment scripts",
+          "Document your sim-to-real pipeline for reproducibility",
+          "Share your demo with the group",
+        ],
+        commands: [
+          "# Check Solo CLI status (if using)",
+          "solo status",
+          "",
+          "# Save Nebius deployment config",
+          "nebius msp serverless v1alpha1 endpoint get $ENDPOINT_ID --format yaml > g1-deploy.yaml",
+        ],
+        tips: [
+          "Best demo: simulation training timelapse → real robot executing the policy.",
+          "All Unitree G1 resources: LeRobot (https://huggingface.co/docs/lerobot/en/unitree_g1), SDK (https://github.com/unitreerobotics/unitree_sdk2_python), GROOT WBC (https://github.com/NVlabs/GR00T-WholeBodyControl), Isaac Lab (https://github.com/unitreerobotics/unitree_sim_isaaclab), G1 Replay (https://github.com/GetSoloTech/unitree-g1-replay)",
+        ],
+        checkpoint:
+          "You have a video, saved policy, and documented pipeline for the G1.",
+      },
+    ],
+  },
 ];

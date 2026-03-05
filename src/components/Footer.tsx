@@ -25,7 +25,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-nebius-border bg-nebius-darker">
       <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <LobsterLogo className="w-8 h-8" />
@@ -39,12 +39,22 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Workshops</h4>
+            <h4 className="text-sm font-semibold text-white mb-4">Agent Workshops</h4>
             <ul className="space-y-3">
               <li><Link href="/workshops/agent-inference" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Agent-Grade Inference</Link></li>
               <li><Link href="/workshops/private-agents" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Private Agents</Link></li>
-              <li><Link href="/workshops/agent-lifecycle" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Improving Agents Over Time</Link></li>
-              <li><Link href="/workshops/robotics" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Robotics + SO-ARM101</Link></li>
+              <li><Link href="/workshops/agent-lifecycle" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Improving Agents</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold text-white mb-4">Robot Workshops</h4>
+            <ul className="space-y-3">
+              <li><Link href="/workshops/robotics" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Solo CLI + SO-101</Link></li>
+              <li><Link href="/workshops/lekiwi" className="text-sm text-nebius-text-muted hover:text-white transition-colors">LeKiwi</Link></li>
+              <li><Link href="/workshops/opendroid" className="text-sm text-nebius-text-muted hover:text-white transition-colors">OpenDroid R1D2</Link></li>
+              <li><Link href="/workshops/booster" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Booster</Link></li>
+              <li><Link href="/workshops/unitree-g1" className="text-sm text-nebius-text-muted hover:text-white transition-colors">Unitree G1</Link></li>
             </ul>
           </div>
 
