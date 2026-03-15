@@ -149,7 +149,7 @@ export const workshops: Workshop[] = [
         ],
         commands: [
           "# Install Nebius CLI (macOS)",
-          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "curl -sSL https://storage.eu-north1.nebius.cloud/cli/install.sh | bash",
           "",
           "# Login to your account",
           "nebius auth login",
@@ -449,7 +449,7 @@ export const workshops: Workshop[] = [
         ],
         commands: [
           "# Install Nebius CLI",
-          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "curl -sSL https://storage.eu-north1.nebius.cloud/cli/install.sh | bash",
           "",
           "# Login",
           "nebius auth login",
@@ -990,7 +990,7 @@ export const workshops: Workshop[] = [
           "solo setup",
           "",
           "# Install Nebius CLI",
-          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "curl -sSL https://storage.eu-north1.nebius.cloud/cli/install.sh | bash",
           "nebius auth login",
         ],
         tips: [
@@ -1384,7 +1384,7 @@ export const workshops: Workshop[] = [
         ],
         commands: [
           "# Install Nebius CLI",
-          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "curl -sSL https://storage.eu-north1.nebius.cloud/cli/install.sh | bash",
           "nebius auth login",
           "",
           "# Deploy orchestrator",
@@ -1708,7 +1708,7 @@ export const workshops: Workshop[] = [
         ],
         commands: [
           "# Install Nebius CLI",
-          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "curl -sSL https://storage.eu-north1.nebius.cloud/cli/install.sh | bash",
           "nebius auth login",
           "",
           "# Deploy orchestrator",
@@ -1964,7 +1964,7 @@ export const workshops: Workshop[] = [
         ],
         commands: [
           "# Install Nebius CLI",
-          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "curl -sSL https://storage.eu-north1.nebius.cloud/cli/install.sh | bash",
           "nebius auth login",
           "",
           "# Set Token Factory key for GPU training",
@@ -2234,7 +2234,7 @@ export const workshops: Workshop[] = [
           "cd unitree_sim_isaaclab && pip install -e .",
           "",
           "# Install Nebius CLI",
-          "curl -sSL https://storage.ai.nebius.cloud/cli/install.sh | bash",
+          "curl -sSL https://storage.eu-north1.nebius.cloud/cli/install.sh | bash",
           "nebius auth login",
           "",
           "# Set Token Factory for GPU training",
