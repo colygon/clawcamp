@@ -1,6 +1,6 @@
 # From prototype to production: Deploying OpenClaw agents on Nebius Cloud
 
-*Your agent demo works perfectly on localhost. Then you ship it — and everything breaks. Here's how to deploy production-grade OpenClaw agents on Nebius serverless endpoints, using Token Factory for inference, without managing a single GPU.*
+*Your agent demo works perfectly on localhost. Then you ship it — and everything breaks. Here's how to deploy production-grade OpenClaw agents on Nebius serverless endpoints — no GPU management required.*
 
 **Reading time:** ~12 minutes
 **Author:** Colin Lowenberg
@@ -10,7 +10,7 @@
 
 ## The production problem
 
-Agent demo apps work great on your laptop. You pick a model, wire up some tools, test a few prompts, and everything feels magical. Then you try to ship it to real users, and a different set of problems shows up: GPU provisioning, container orchestration, model weight management, WebSocket networking, secret rotation, health monitoring, and keeping the whole thing running at 3 AM when a user in another timezone sends a message.
+Agent demo apps work great on your laptop. You pick a model, wire up some tools, test a few prompts, and everything works. Then you try to ship it to real users, and a different set of problems shows up: GPU provisioning, container orchestration, model weight management, WebSocket networking, secret rotation, and health monitoring. And then there's keeping the whole thing running at 3 AM when a user in another timezone sends a message.
 
 Most teams hit the same wall. The agent logic is maybe 20% of the work. The other 80% is infrastructure — and it's the part nobody planned for.
 
@@ -18,7 +18,9 @@ This guide walks through a deployment approach that eliminates most of that infr
 
 ## What is OpenClaw?
 
-OpenClaw is an open-source AI agent platform with a distinctive architecture: it separates agent orchestration from model inference. The OpenClaw Gateway handles everything except thinking — WebSocket communication, channel integrations (Telegram, WhatsApp, Discord, Signal, iMessage), session management, cron scheduling, tool execution, and a web-based Control UI dashboard.
+OpenClaw is an open-source AI agent platform with a distinctive architecture: it separates agent orchestration from model inference.
+
+The OpenClaw Gateway handles everything except thinking. That includes WebSocket communication, channel integrations (Telegram, WhatsApp, Discord, Signal, iMessage), session management, cron scheduling, tool execution, and a web-based Control UI dashboard.
 
 The inference — the LLM "thinking" part — is delegated to a configurable backend. This is the key insight that makes serverless CPU deployment possible. The agent runtime runs on a lightweight CPU instance. The heavy computation happens elsewhere, on purpose-built GPU infrastructure.
 
@@ -40,15 +42,39 @@ The OpenClaw container is a Node.js application with two processes:
 
 2. **The Health Check** (port 8080) — a lightweight Python HTTP server that responds to Nebius readiness probes. Nebius polls this endpoint periodically and restarts the container if it stops responding.
 
-The entire container runs on `cpu-e2` (Intel Ice Lake) with 2 vCPUs and 8 GiB RAM — the smallest preset Nebius offers. No GPU allocation needed.
+The entire container runs on `cpu-e2` (Intel Ice Lake) with 2 vCPUs and 8 GiB RAM — the smallest preset Nebius offers.
 
-### Why Token Factory for inference?
+### Inference via Token Factory
 
-[Token Factory](https://tokenfactory.nebius.com) provides an OpenAI-compatible API backed by Nebius GPU clusters. Instead of provisioning and managing GPU instances, you make API calls. Token Factory handles model loading, batching, scaling, and hardware — you pay per token.
+[Token Factory](https://tokenfactory.nebius.com) provides an OpenAI-compatible API backed by Nebius GPU clusters. Instead of provisioning and managing GPU instances, you make API calls. Token Factory handles model loading, batching, scaling, and the underlying hardware — you pay per token.
 
-Available models include `zai-org/GLM-5`, `deepseek-ai/DeepSeek-R1-0528`, `zai-org/GLM-4.5`, and `MiniMaxAI/MiniMax-M2.5`, among others. New models are added regularly.
+Available models include `zai-org/GLM-5`, `deepseek-ai/DeepSeek-R1-0528`, `zai-org/GLM-4.5`, and `MiniMaxAI/MiniMax-M2.5`, among others.
 
-For agent workloads, this is a natural fit. Agent orchestration is CPU-bound (routing messages, managing sessions, executing tools). Inference is GPU-bound but bursty — you need it when the agent "thinks," not continuously. Paying per token instead of reserving GPU instances can reduce costs significantly for typical agent traffic patterns.
+For agent workloads, this is a natural fit. Agent orchestration is CPU-bound (routing messages, managing sessions, executing tools). Inference is GPU-bound but bursty — you need it when the agent "thinks," not continuously, where bursts of inference are separated by idle periods. Paying per token instead of reserving GPU instances can reduce costs significantly for this traffic pattern.
+
+## Secrets management with MysteryBox
+
+Before deploying, store your API key in [MysteryBox](https://console.nebius.com/mysterybox), Nebius's managed secrets service — rather than hardcoding it in scripts or environment variables.
+
+Store a secret:
+
+```bash
+nebius mysterybox secret create \
+  --name token-factory-key \
+  --parent-id <project-id> \
+  --secret-version-payload \
+    '[{"key":"TOKEN_FACTORY_API_KEY","string_value":"v1.xxx..."}]'
+```
+
+The `--secret-version-payload` takes a JSON array of key-value pairs. Find your `<project-id>` with `nebius iam project list`.
+
+Retrieve it later:
+
+```bash
+nebius mysterybox payload get --secret-id <secret-id>
+```
+
+The Deploy UI (covered below) integrates with MysteryBox directly — secrets load automatically in the Configure step, and you can save new keys from the UI.
 
 ## Deploying OpenClaw: three paths
 
@@ -65,21 +91,19 @@ export TOKEN_FACTORY_API_KEY="v1.xxx..."
 
 The script performs five steps automatically:
 
-**Step 1 — Registry.** Creates a Nebius Container Registry if one doesn't exist. The registry stores your Docker images in the same region as your endpoints.
+**Step 1 — Registry.** Creates a Nebius Container Registry if one doesn't exist.
 
 **Step 2 — Build.** Builds a `linux/amd64` Docker image based on `node:22-slim` with OpenClaw installed globally. The entrypoint script reads configuration from environment variables at startup, so the same image works across different models and API keys.
 
 **Step 3 — Push.** Authenticates with the Nebius registry using a short-lived IAM token and pushes the image.
 
-**Step 4 — Deploy.** Creates a serverless endpoint with the correct CPU platform for the target region, exposed ports (8080 + 18789), environment variables, and an SSH key for terminal access.
+**Step 4 — Deploy.** Creates a serverless endpoint with the correct CPU platform for the target region, exposed ports (8080 + 18789), environment variables, and an SSH key for terminal access. SSH access is useful for debugging and inspecting container logs.
 
 **Step 5 — Wait.** Polls the endpoint state every 10 seconds until it reaches `RUNNING`, then prints connection details.
 
-> **A note on registry IDs:** The Nebius CLI returns registry IDs prefixed with `registry-` (e.g., `registry-u00wtpem36bva2zhc8`), but Docker image URLs use only the bare ID (`u00wtpem36bva2zhc8`). Our scripts strip this prefix automatically. If you're building your own deployment tooling, this is an easy mistake that produces a confusing "repository name not known to registry" error during `docker push`.
-
 ### Path 2: Pre-built public image
 
-If you want to skip the Docker build entirely, we publish images to GitHub Container Registry:
+Skip the Docker build entirely. We publish images to GitHub Container Registry:
 
 ```bash
 docker pull ghcr.io/colygon/openclaw-serverless:latest
@@ -103,11 +127,13 @@ nebius ai endpoint create \
   --ssh-key "$(cat ~/.ssh/id_ed25519.pub)"
 ```
 
-### Path 3: Web Deploy UI
+Key flags: `--public` assigns a public IP for direct access. `--container-port` must be specified for each port — the Dockerfile's `EXPOSE` directive alone doesn't map ports externally.
 
-For teams that prefer a visual interface, we built a web-based Deploy UI — a Node.js application that wraps the Nebius CLI in a browser-friendly wizard:
+### Path 3: Self-hosted Deploy UI
 
-1. **Choose Agent** — OpenClaw (lightweight) or NemoClaw (with NVIDIA plugin)
+For teams that prefer a visual interface, we built a self-hosted Deploy UI — a Node.js application that wraps the Nebius CLI in a browser-friendly wizard:
+
+1. **Choose Agent** — OpenClaw (lightweight) or NemoClaw (with NVIDIA plugin, covered below)
 2. **Choose Model** — GLM-5, MiniMax-M2.5, or browse all Token Factory models
 3. **Choose Region** — EU North (Finland), EU West (Paris), or US Central
 4. **Choose API Provider** — Token Factory, OpenRouter, or HuggingFace (all routed through Nebius)
@@ -137,20 +163,27 @@ Our install scripts detect the region and select the correct platform automatica
 
 ## Connecting to your agent
 
-Once the endpoint is running, there are three ways to interact with it.
+Once the endpoint is running, there are three ways to interact with it. For first-time verification, start with the **TUI via SSH tunnel**.
 
 ### OpenClaw TUI
 
 The terminal interface connects via WebSocket. For security, OpenClaw blocks plaintext `ws://` connections to non-localhost addresses. Use an SSH tunnel:
 
 ```bash
+# Create a background tunnel: forwards local port 28789 to the
+# endpoint's gateway port (18789) through your VM
 ssh -f -N -L 28789:<endpoint-ip>:18789 nebius@<your-vm-ip>
+
+# Connect to the agent
 openclaw tui --url ws://localhost:28789 --token <your-token>
 ```
 
-On first connection, the gateway will request **device pairing** — a security feature where new devices must be approved. Approve it from the gateway host:
+The `<endpoint-ip>` is printed by the install script when deployment completes. The `<your-vm-ip>` is the address of any machine with SSH access to the endpoint.
+
+On first connection, the gateway will request **device pairing** — a security feature where new devices must be approved:
 
 ```bash
+# Find the running container and approve the most recent pairing request
 ssh nebius@<endpoint-ip> "sudo docker exec \$(sudo docker ps -q | head -1) \
   openclaw devices approve --latest"
 ```
@@ -163,42 +196,20 @@ The web dashboard provides session management, usage statistics, cron job config
 http://<endpoint-ip>:18789/#token=<your-token>
 ```
 
-> **Secure context requirement:** The Control UI uses browser crypto APIs that require HTTPS or localhost. When accessing via HTTP from a remote IP, you'll see "control UI requires device identity." Use the Deploy UI's HTTPS proxy, an SSH tunnel, or Tailscale Serve for remote access.
+> **Secure context requirement:** The Control UI uses browser crypto APIs that require HTTPS or localhost. When accessing via HTTP from a remote IP, you'll see "control UI requires device identity." Use the Deploy UI's HTTPS proxy, an SSH tunnel, or [Tailscale Serve](https://tailscale.com/kb/1312/serve) for remote access.
 
 ### Channel integrations
 
-OpenClaw supports connecting to messaging platforms. Configure channels in `openclaw.json`:
+OpenClaw supports connecting to messaging platforms. Configure channels in `openclaw.json`. See the [OpenClaw documentation](https://docs.openclaw.ai/channels) for setup guides:
 
 - **Telegram** — Bot token via BotFather
 - **WhatsApp** — Via WhatsApp Web bridge
 - **Discord** — Bot application token
 - **Signal** — Via signal-cli
 
-## Secrets management with MysteryBox
-
-Hardcoding API keys in environment variables works for testing. For production, Nebius provides [MysteryBox](https://console.nebius.com/mysterybox), a managed secrets service.
-
-Store a secret:
-
-```bash
-nebius mysterybox secret create \
-  --name token-factory-key \
-  --parent-id <project-id> \
-  --secret-version-payload \
-    '[{"key":"TOKEN_FACTORY_API_KEY","string_value":"v1.xxx..."}]'
-```
-
-Retrieve it:
-
-```bash
-nebius mysterybox payload get --secret-id <secret-id>
-```
-
-The Deploy UI integrates with MysteryBox directly. Secrets load automatically in the Configure step — no button click needed. You can also save new API keys to MysteryBox from the UI, and they're available for future deployments.
-
 ## NemoClaw: adding the NVIDIA plugin
 
-[NemoClaw](https://github.com/NVIDIA/NemoClaw) extends OpenClaw with NVIDIA's agent capabilities: sandbox execution, enhanced tool orchestration, and planning. The deployment follows the same pattern with specific build requirements.
+With the base OpenClaw deployment working, you may want enhanced agent capabilities. [NemoClaw](https://github.com/NVIDIA/NemoClaw) extends OpenClaw with NVIDIA's sandbox execution, enhanced tool orchestration, and planning.
 
 ### Build differences
 
@@ -209,7 +220,7 @@ The Deploy UI integrates with MysteryBox directly. Secrets load automatically in
 | **Image size** | ~400 MB | ~1.1 GB |
 | **Plugin config** | None needed | Loaded automatically via npm global |
 
-The `--ignore-scripts` flag is needed because `@whiskeysockets/baileys` (a NemoClaw dependency) has a post-install script that fails inside Docker BuildKit. The plugin still works correctly without it.
+The `--ignore-scripts` flag is needed because `@whiskeysockets/baileys` (a NemoClaw dependency) has a post-install script that fails inside Docker BuildKit. The plugin works correctly without it.
 
 ### Deploy NemoClaw
 
@@ -228,11 +239,9 @@ Through building and testing this deployment pipeline, we encountered every fail
 
 **Symptom:** Health check on port 8080 returns `healthy`, but port 18789 is unresponsive.
 
-**Cause:** The gateway process crashed but the health check (PID 1) keeps running. Common triggers:
-- Invalid `openclaw.json` (e.g., adding a `plugins` key — not a valid config key)
-- Model ID not found on Token Factory (404 error from inference)
+**Cause:** The gateway process crashed but the health check (PID 1) keeps running. Common triggers: invalid `openclaw.json` (e.g., adding a `plugins` key — not a valid config key), or model ID not found on Token Factory.
 
-**Fix:** SSH into the endpoint and check the gateway log:
+**Fix:** SSH in and check the gateway log:
 ```bash
 sudo docker exec $(sudo docker ps -q | head -1) cat /tmp/gateway.log
 ```
@@ -243,19 +252,43 @@ sudo docker exec $(sudo docker ps -q | head -1) cat /tmp/gateway.log
 
 **Cause:** The gateway token was set only as an environment variable. When the gateway is manually restarted inside the container, the env var scope changes and the token is lost.
 
-**Fix:** Set the token in the `openclaw.json` config file (the `auth.token` field). The config file is the source of truth that survives process restarts. Our entrypoint scripts now set it in both places.
+**Fix:** Set the token in the `openclaw.json` config file:
+```json
+{
+  "gateway": {
+    "auth": {
+      "mode": "token",
+      "token": "your-token-here"
+    }
+  }
+}
+```
+The config file is the source of truth that survives process restarts. Our entrypoint scripts now set it in both places.
+
+### Invalid Token Factory API key
+
+**Symptom:** "401 Unauthorized" when the agent tries to respond, or no response at all.
+
+**Cause:** The API key is expired, revoked, or was never set in the container's environment.
+
+**Fix:** Verify your key works:
+```bash
+curl -s https://api.tokenfactory.nebius.com/v1/models \
+  -H "Authorization: Bearer $TOKEN_FACTORY_API_KEY" | head -1
+```
+If it returns model data, the key is valid. Redeploy with a fresh key if needed.
 
 ### Wrong model ID format
 
 **Symptom:** "404 status code (no body)" when the agent tries to respond.
 
-**Cause:** Token Factory uses its own model IDs (e.g., `zai-org/GLM-5`), not HuggingFace IDs (e.g., `THUDM/GLM-4-9B-0414`). The naming convention differs.
+**Cause:** Token Factory uses its own model IDs (e.g., `zai-org/GLM-5`), not HuggingFace IDs (e.g., `THUDM/GLM-4-9B-0414`).
 
 **Fix:** List available models:
 ```bash
 curl -s https://api.tokenfactory.nebius.com/v1/models \
-  -H "Authorization: Bearer $TOKEN_FACTORY_API_KEY" | python3 -c \
-  "import json,sys; [print(m['id']) for m in json.load(sys.stdin)['data']]"
+  -H "Authorization: Bearer $TOKEN_FACTORY_API_KEY" \
+  | python3 -c "import json,sys; [print(m['id']) for m in json.load(sys.stdin)['data']]"
 ```
 
 ### Docker push fails with "repository name not known"
@@ -264,24 +297,25 @@ curl -s https://api.tokenfactory.nebius.com/v1/models \
 
 **Cause:** The registry ID from `nebius registry list` includes a `registry-` prefix that must be stripped from the Docker image URL.
 
-**Fix:** Strip the prefix: `REGISTRY_ID="${REGISTRY_ID#registry-}"`
+**Fix:** `REGISTRY_ID="${REGISTRY_ID#registry-}"`
 
 ### "Origin not allowed" on dashboard
 
 **Symptom:** Control UI displays "origin not allowed" error.
 
-**Cause:** The gateway's `controlUi.allowedOrigins` only permits localhost by default. Any proxy, port forward, or non-localhost access is blocked.
+**Cause:** The gateway's `controlUi.allowedOrigins` only permits localhost by default.
 
-**Fix:** Set `allowedOrigins` to `["*"]` in the gateway config or via:
+**Fix:** Add your proxy domain, or use a wildcard for development:
 ```bash
 openclaw config set gateway.controlUi.allowedOrigins '["*"]'
 ```
+For production, replace `"*"` with your specific proxy domain.
 
 ### Port 18789 not accessible
 
-**Symptom:** Health check works (port 8080), but gateway port 18789 is unreachable from outside.
+**Symptom:** Health check works (port 8080), but gateway port 18789 is unreachable.
 
-**Cause:** Port 18789 is exposed inside the Docker container but not mapped to the host. The `EXPOSE` directive in a Dockerfile doesn't map ports — you need `--container-port 18789` in the `nebius ai endpoint create` command.
+**Cause:** The Dockerfile's `EXPOSE` directive doesn't map ports externally — you need `--container-port 18789` in the endpoint creation command.
 
 **Fix:** Include both ports: `--container-port 8080 --container-port 18789`
 
@@ -289,35 +323,29 @@ openclaw config set gateway.controlUi.allowedOrigins '["*"]'
 
 Before going live, verify:
 
-- [ ] **Token Factory API key** is stored in MysteryBox (not hardcoded in scripts)
-- [ ] **Gateway token** is set in both the config file and `OPENCLAW_WEB_PASSWORD` env var
+- [ ] **Token Factory API key** stored in MysteryBox (not hardcoded)
+- [ ] **Gateway token** set in both the config file and `OPENCLAW_WEB_PASSWORD` env var
 - [ ] **Both ports exposed** — 8080 (health) and 18789 (gateway) via `--container-port`
-- [ ] **Correct CPU platform** for your target region (cpu-e2 for Finland/US, cpu-d3 for Paris)
-- [ ] **SSH key authorized** on the endpoint for terminal access and debugging
-- [ ] **Model ID** matches Token Factory format (check with the models API)
-- [ ] **`allowedOrigins`** includes `"*"` if accessing the dashboard through a proxy
+- [ ] **Correct CPU platform** for your region (cpu-e2 for Finland/US, cpu-d3 for Paris)
+- [ ] **SSH key authorized** on the endpoint for debugging
+- [ ] **Model ID** matches Token Factory format (verify with the models API)
+- [ ] **`allowedOrigins`** configured for your proxy domain
+- [ ] **HTTPS configured** for the Control UI (via reverse proxy, Tailscale, or SSH tunnel)
 - [ ] **Health check tested** — `curl http://<ip>:8080` returns `{"status":"healthy"}`
 - [ ] **Gateway tested** — TUI connects and receives a response from the model
-- [ ] **No `plugins` key** in `openclaw.json` (crashes the gateway)
-
-## What's next
-
-This deployment pattern — CPU agent with cloud inference — is a starting point. From here, teams can:
-
-- **Add channel integrations** to connect the agent to Telegram, WhatsApp, Discord, or Signal for real-time user interaction
-- **Deploy across regions** (Finland, Paris, US) for low-latency global coverage with the same Docker image
-- **Use the Nebius Skill for Claude Code** ([github.com/colygon/nebius-skill](https://github.com/colygon/nebius-skill)) to manage cloud infrastructure via natural language — deploy endpoints, rotate secrets, monitor health, all from a chat interface
-- **Connect to physical robotics** like the LaRobot SO-101 robot arms, using cloud-powered inference for real-time decision making
-
-All the deployment scripts, Docker images, and the Deploy UI are open source: [github.com/colygon/openclaw-deploy](https://github.com/colygon/openclaw-deploy).
+- [ ] **No `plugins` key** in `openclaw.json`
 
 ## Getting started
 
+Five minutes from now, you could have a production AI agent responding to users across Telegram, Discord, and the web — running entirely on CPU with cloud-powered inference.
+
 1. [Create a Token Factory API key](https://tokenfactory.nebius.com)
 2. [Install the Nebius CLI](https://docs.nebius.com/cli/install)
-3. Run the install script — your agent will be live in under five minutes
+3. Run `./install-openclaw-serverless.sh` — your agent will be live in under five minutes
 
-For deeper dives into specific topics, check out the [ClawCamp workshop series](https://github.com/colygon/clawcamp) covering multi-region deployments, NemoClaw, the Nebius Skill, and physical robotics.
+From here, teams can add channel integrations, deploy across regions (Finland, Paris, US) for low-latency global coverage, use the [Nebius Skill for Claude Code](https://github.com/colygon/nebius-skill) to manage infrastructure via natural language, or connect to physical robotics like the LaRobot SO-101 robot arms.
+
+All scripts, Docker images, and the Deploy UI are open source: [github.com/colygon/openclaw-deploy](https://github.com/colygon/openclaw-deploy). For deeper dives, check out the [ClawCamp workshop series](https://github.com/colygon/clawcamp) covering multi-region deployments on Nebius, NemoClaw, the Nebius Skill, and physical robotics.
 
 ---
 
