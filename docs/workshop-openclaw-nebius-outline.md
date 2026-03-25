@@ -1,150 +1,156 @@
-# Workshop: Deploy OpenClaw AI Agents on Nebius Cloud
+# Deploy OpenClaw AI Agents on Nebius Cloud
+
+## From Prototype to Production in 60 Minutes
 
 **Date:** April 6–8, 2026 (dry run: Monday April 6)
-**Speakers:** Colin Lowenberg & Mikhail Rozhkov (Nebius, serverless part)
-**Format:** Live online workshop (Zoom / StreamYard)
-**Duration:** ~60 minutes + Q&A
+**Speakers:** Colin Lowenberg & Mikhail Rozhkov (Nebius)
+**Format:** Live online workshop · Zoom / StreamYard
+**Duration:** 60 minutes + live Q&A
+**Level:** Beginner–Intermediate · No GPU knowledge required
 
 ---
 
-## Registration Page Copy
+## What You'll Build
 
-### Title
-**Deploy OpenClaw AI Agents on Nebius Cloud — No GPU Required**
+By the end of this workshop, you'll have:
 
-### Subtitle
-Learn how to deploy production-ready AI agents using OpenClaw and Nebius serverless endpoints, with Token Factory for inference and NemoClaw for custom model deployments.
+- A **production-ready AI agent** running on Nebius Cloud — accessible via terminal, web dashboard, and messaging channels
+- A **Token Factory-powered agent** on a CPU serverless endpoint — no GPU management, pay per token
+- A **self-contained GPU deployment** with a local model running inside the container — predictable cost, auto-pauses when idle
+- The **scripts, Docker images, and configuration** to replicate both approaches in your own projects
 
-### Description
-
-Your agent works perfectly on localhost. Shipping it to production is a different story — GPU provisioning, container orchestration, WebSocket networking, secret management, and keeping it running 24/7.
-
-In this hands-on workshop, Colin Lowenberg and Mikhail Rozhkov will show you how to deploy OpenClaw AI agents on Nebius Cloud in minutes, using two approaches:
-
-1. **CPU serverless + Token Factory** — Deploy a lightweight agent on the cheapest CPU instance with cloud-powered GPU inference via Token Factory. No GPU management, pay per token.
-
-2. **GPU serverless with a custom model** — Deploy NemoClaw with a local LLM on a Nebius GPU endpoint for fully self-contained inference. Predictable hourly cost, auto-pauses when idle.
-
-You'll walk away with a running AI agent accessible via terminal, web dashboard, and messaging channels — plus the scripts and Docker images to replicate it.
-
-### What you'll learn
-
-- How OpenClaw separates agent orchestration from model inference
-- Deploying to Nebius serverless endpoints (console UI, CLI, and install scripts)
-- Configuring Token Factory for GPU-powered inference without managing hardware
-- Deploying NemoClaw with a custom model on GPU endpoints
-- Managing secrets with Nebius MysteryBox
-- Connecting via the OpenClaw TUI, Control UI dashboard, and messaging channels
-- Production gotchas: gateway tokens, device pairing, model ID formats, port mapping
-
-### Prerequisites
-
-- A [Nebius AI Cloud](https://console.nebius.com) account (free trial available)
-- A [Token Factory](https://tokenfactory.nebius.com) API key
-- [Nebius CLI](https://docs.nebius.com/cli/install) installed (for hands-on sections)
-- Docker installed (optional — pre-built images available)
-
-### Who should attend
-
-- Developers building AI agents or chatbots
-- DevOps/platform engineers evaluating agent deployment options
-- Anyone interested in running AI workloads on Nebius Cloud
+> *"I deployed an agent with tool calling in under 30 minutes — and it costs pennies per run"*
 
 ---
 
-## Workshop Outline
+## Why This Workshop
 
-### Part 1: Introduction (10 min) — Colin
+Your agent works perfectly on localhost. Shipping it to production is a different story.
 
-- **The production problem** — why agent demos break when you ship them
-- **What is OpenClaw** — open-source agent platform, separates orchestration from inference
-- **Three deployment options:**
-  - Option 1: OpenClaw anywhere + Token Factory (BYO CPU)
-  - Option 2: Nebius CPU serverless + Token Factory (production)
-  - Option 3: Nebius GPU serverless + local model (custom/self-contained)
+GPU provisioning. Container orchestration. WebSocket networking. Secret management. Health monitoring. Keeping everything alive at 3 AM when a user in another timezone sends a message. The agent logic is maybe 20% of the work. The other 80% is infrastructure — and it's the part nobody planned for.
 
-### Part 2: Deploy with Token Factory (20 min) — Colin
+This workshop eliminates that 80%. You'll deploy OpenClaw AI agents on Nebius Cloud using two battle-tested approaches, and walk away knowing exactly which one fits your use case.
 
-- **Live demo: Console deployment**
-  - Navigate Nebius console → Serverless AI → Create endpoint
-  - Use pre-built image: `ghcr.io/colygon/openclaw-serverless:latest`
-  - Configure: cpu-e2, 2vcpu-8gb, ports 8080 + 18789
-  - Set env vars: TOKEN_FACTORY_API_KEY, INFERENCE_MODEL (zai-org/GLM-5)
-  - Deploy and wait for RUNNING
+---
 
-- **Live demo: CLI deployment**
-  - `./install-openclaw-serverless.sh` one-command deploy
-  - Walk through what the script does (registry, build, push, deploy)
+## Two Deployment Paths
 
-- **Connect to the agent**
-  - Health check: `curl http://<ip>:8080`
-  - TUI via SSH tunnel: `openclaw tui --url ws://localhost:28789 --token <password>`
-  - Dashboard: `http://<ip>:18789/#token=<password>`
-  - Device pairing approval
+### Path 1: CPU Serverless + Token Factory
+*Cheapest. Simplest. Best for most agent workloads.*
 
-- **Token Factory models**
-  - Available models: GLM-5, DeepSeek-R1, MiniMax-M2.5
-  - Model ID format (zai-org/GLM-5, NOT THUDM/...)
-  - Switching models live
+Deploy a lightweight OpenClaw container on the smallest CPU instance Nebius offers (2 vCPUs, 8 GiB RAM). All inference is handled by Token Factory — Nebius's managed GPU inference API with 30+ open-source models. You pay per token for inference, per second for the CPU instance.
 
-### Part 3: Deploy with Custom Model on GPU (20 min) — Mikhail
+**Use when:** You want a production agent without managing GPUs, model weights, or inference infrastructure.
 
-- **Why GPU serverless?**
-  - Custom fine-tuned models
-  - Data privacy / single security boundary
-  - Predictable hourly cost, auto-pause when idle
+### Path 2: GPU Serverless + Local Model
+*Self-contained. Private. Predictable cost.*
 
-- **NemoClaw overview**
-  - NVIDIA plugin that wraps OpenClaw
-  - Sandbox execution, enhanced planning
-  - `ghcr.io/colygon/nemoclaw-serverless:latest`
+Deploy NemoClaw (NVIDIA's OpenClaw plugin) with a local LLM bundled inside a GPU-powered container. Everything runs in one endpoint — no external API calls. The serverless endpoint auto-pauses when idle, so you only pay for active time.
 
-- **Live demo: GPU endpoint deployment**
-  - Nebius GPU presets and platforms
-  - Deploying with a local model (vLLM / llama.cpp)
-  - Configuring inference within the container
-  - Monitoring and resource usage
+**Use when:** You need a custom fine-tuned model, want data to stay within a single security boundary, or prefer a fixed hourly rate over per-token pricing.
 
-- **Nebius serverless features**
-  - Auto-pause and resume
-  - Per-second billing
-  - Health monitoring and readiness probes
-  - Start/stop/delete lifecycle
+---
 
-### Part 4: Production Tips & Secrets Management (5 min) — Colin
+## What We'll Cover
 
-- **MysteryBox** — store API keys securely
-  - CLI: `nebius mysterybox secret create`
-  - Console: Nebius MysteryBox UI
-- **Gateway token configuration** — set in config file AND env var
-- **Region → platform mapping** — cpu-e2 vs cpu-d3
-- **Common failure modes** — top 3 gotchas and fixes:
-  1. Wrong model ID format → 404
-  2. Missing --container-port 18789 → gateway unreachable
-  3. Token mismatch after restart → set in openclaw.json
+### Agent Architecture
+- How OpenClaw separates orchestration from inference — and why that matters
+- The CPU agent + cloud inference pattern: why you don't need a GPU for most agent workloads
+- OpenClaw vs. NemoClaw: not competing projects — NemoClaw wraps OpenClaw for GPU deployments
 
-### Part 5: Q&A & Next Steps (5 min) — Both
+### Token Factory Integration
+- Connecting to Token Factory's OpenAI-compatible API
+- Choosing the right model: GLM-5, DeepSeek-R1, MiniMax-M2.5
+- Model ID gotcha: Token Factory uses `zai-org/GLM-5`, not HuggingFace format
+- Cost and latency optimization for bursty agent traffic
 
-- **Resources:**
-  - Scripts & Deploy UI: [github.com/colygon/openclaw-deploy](https://github.com/colygon/openclaw-deploy)
-  - Nebius Skill for Claude Code: [github.com/colygon/nebius-skill](https://github.com/colygon/nebius-skill)
-  - Blog post: "The complete guide to deploying OpenClaw on Nebius Cloud"
-  - OpenClaw docs: [docs.openclaw.ai](https://docs.openclaw.ai)
-  - Token Factory: [tokenfactory.nebius.com](https://tokenfactory.nebius.com)
+### Deployment (Live Demos)
+- **Console deployment** — point-and-click in the Nebius web UI, no CLI required
+- **One-command CLI** — `./install-openclaw-serverless.sh` handles everything
+- **Pre-built images** — `ghcr.io/colygon/openclaw-serverless:latest` (no Docker build needed)
+- **GPU endpoint** — NemoClaw with a local model on Nebius GPU presets
 
-- **Open Q&A**
+### Connecting to Your Agent
+- OpenClaw TUI (terminal interface) via SSH tunnel
+- Control UI dashboard — sessions, usage, cron jobs, live chat
+- Device pairing — the security model and how to approve new clients
+- Channel integrations — Telegram, WhatsApp, Discord, Signal
+
+### Production Hardening
+- Secrets management with Nebius MysteryBox
+- Gateway token configuration (the config file vs. env var trap)
+- Region → CPU platform mapping (eu-north1 = cpu-e2, eu-west1 = cpu-d3)
+- The top 5 failure modes we hit and how to fix them
+
+---
+
+## Schedule
+
+| Time | Section | Speaker | What Happens |
+|------|---------|---------|-------------|
+| 0:00 | **The Production Problem** | Colin | Why agent demos break when you ship them. Three deployment options explained. |
+| 0:10 | **Deploy with Token Factory** | Colin | Live demo: Console deploy → CLI deploy → connect via TUI and dashboard. Switch models live. |
+| 0:30 | **Deploy with Custom Model on GPU** | Mikhail | Live demo: NemoClaw + GPU endpoint. Local inference, auto-pause, serverless billing. |
+| 0:50 | **Production Tips & Gotchas** | Colin | MysteryBox secrets, gateway tokens, failure modes, and the deployment checklist. |
+| 0:55 | **Q&A** | Both | Open questions, debugging, and next steps. |
+
+---
+
+## Prerequisites
+
+Come prepared with these and you'll be able to follow along live:
+
+- **A Nebius AI Cloud account** — [Sign up at console.nebius.com](https://console.nebius.com) (free trial available)
+- **A Token Factory API key** — [Get one at tokenfactory.nebius.com](https://tokenfactory.nebius.com)
+- **Nebius CLI installed** — `curl -sSL https://storage.eu-north1.nebius.cloud/cli/install.sh | bash`
+- **Docker** (optional) — only needed if you want to build custom images; pre-built images work without it
+- **Basic terminal comfort** — you should be able to run commands, SSH into servers, and read JSON
+
+Don't have everything set up? No worries — you can follow along with the live demos and set up afterward using our open-source scripts.
+
+---
+
+## Who Should Attend
+
+- **Developers building AI agents** who want to go from prototype to production
+- **DevOps and platform engineers** evaluating serverless options for agent deployment
+- **Founders and technical leads** exploring open-source alternatives to hosted agent platforms
+- **Anyone curious about running AI workloads on Nebius Cloud** — whether CPU or GPU
+
+---
+
+## Your Speakers
+
+**Colin Lowenberg** — Builder and community organizer behind ClawCamp. Built the OpenClaw Deploy UI, install scripts, and Nebius Skill for Claude Code. Has deployed dozens of OpenClaw agents on Nebius and documented every failure mode along the way.
+
+**Mikhail Rozhkov** — Nebius. Expert on Nebius serverless infrastructure, GPU deployments, and production AI workloads. Will demo deploying NemoClaw with a custom model on GPU endpoints and cover Nebius serverless features.
+
+---
+
+## Resources You'll Get
+
+Everything from this workshop is open source:
+
+- **[openclaw-deploy](https://github.com/colygon/openclaw-deploy)** — Install scripts, Dockerfiles, Deploy UI, and setup guide
+- **[nebius-skill](https://github.com/colygon/nebius-skill)** — Claude Code skill for managing Nebius infrastructure via natural language
+- **Pre-built Docker images:**
+  - `ghcr.io/colygon/openclaw-serverless:latest` — OpenClaw (CPU, ~400 MB)
+  - `ghcr.io/colygon/nemoclaw-serverless:latest` — NemoClaw (GPU-ready, ~1.1 GB)
+- **Blog post:** "The complete guide to deploying OpenClaw AI agents on Nebius Cloud"
+- **OpenClaw docs:** [docs.openclaw.ai](https://docs.openclaw.ai)
+- **Token Factory:** [tokenfactory.nebius.com](https://tokenfactory.nebius.com)
 
 ---
 
 ## Dry Run Checklist (Monday April 6)
 
 - [ ] Both speakers have Nebius accounts with active endpoints
-- [ ] Token Factory API key working (test with curl)
-- [ ] Pre-built images pulled and tested
+- [ ] Token Factory API key working (test with `curl`)
+- [ ] Pre-built images pulled and tested on both CPU and GPU
 - [ ] Console deployment flow rehearsed (screen share ready)
-- [ ] CLI deployment tested end-to-end
+- [ ] CLI deployment tested end-to-end (`install-openclaw-serverless.sh`)
 - [ ] GPU endpoint with custom model running (Mikhail)
-- [ ] TUI + dashboard connection working
-- [ ] Zoom/StreamYard setup tested (screen sharing, audio)
-- [ ] Backup slides/screenshots in case of live demo failure
-- [ ] Registration page live with correct date/time/links
+- [ ] TUI + dashboard connection working (SSH tunnel, device pairing)
+- [ ] Zoom/StreamYard setup tested (screen sharing, audio, recording)
+- [ ] Backup slides/screenshots in case of live demo issues
+- [ ] Registration page live with correct date, time, and links
