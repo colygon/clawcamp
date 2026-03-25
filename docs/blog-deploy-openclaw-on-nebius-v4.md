@@ -339,18 +339,29 @@ See the [OpenClaw documentation](https://docs.openclaw.ai/channels) for setup gu
 
 ---
 
-## NemoClaw: adding the NVIDIA plugin
+## OpenClaw and NemoClaw: understanding the relationship
 
-With OpenClaw running, you may want enhanced capabilities. [NemoClaw](https://github.com/NVIDIA/NemoClaw) extends OpenClaw with NVIDIA's sandbox execution, enhanced tool orchestration, and agent planning.
+A common misconception is that OpenClaw and NemoClaw are competing projects. They're not. [NemoClaw](https://github.com/NVIDIA/NemoClaw) is an NVIDIA-built plugin that **wraps** OpenClaw — it installs on top of OpenClaw and extends it with additional capabilities. Every NemoClaw deployment is an OpenClaw deployment with NVIDIA's plugin layer added.
 
-### OpenClaw vs. NemoClaw
+Think of it this way: OpenClaw is the agent runtime. NemoClaw adds NVIDIA-specific enhancements — sandbox execution for safe code running, enhanced tool orchestration, and advanced agent planning. If OpenClaw is the engine, NemoClaw is the turbocharger.
+
+### When to use which
 
 | | OpenClaw | NemoClaw |
 |---|---|---|
+| **What it is** | The core agent platform | NVIDIA plugin that wraps OpenClaw |
+| **Relationship** | Standalone | Requires OpenClaw (installed automatically) |
+| **Ideal deployment** | **Option 2** — CPU endpoint + Token Factory | **Option 3** — GPU endpoint with local model |
+| **GPU needed** | No | Designed for NVIDIA GPUs |
+| **Use case** | General-purpose agents, chat bots, multi-channel automation | GPU-accelerated agents, local LLM inference, sandbox execution |
 | **Base image** | `node:22-slim` (~400 MB) | `node:22` full (~1.1 GB) |
-| **npm install** | Standard | `--ignore-scripts` required |
-| **Plugin config** | None needed | Loaded automatically via npm global |
 | **Public image** | `ghcr.io/colygon/openclaw-serverless` | `ghcr.io/colygon/nemoclaw-serverless` |
+
+**OpenClaw alone is the right choice** when you're using Token Factory or any external inference API. It's lightweight, deploys on CPU, and handles production agent workloads with minimal resources.
+
+**NemoClaw is the right choice** when you want to run a local model on NVIDIA GPUs — whether that's a custom fine-tuned model, a model you need to keep within a single security boundary, or a deployment where you want the full stack (agent + inference) in one container. NemoClaw is ideally suited for Option 3: deploying on Nebius GPU endpoints with a local model bundled inside the container.
+
+### Build differences
 
 ### Why `node:22` and `--ignore-scripts`?
 
