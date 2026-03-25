@@ -244,10 +244,10 @@ nebius ai endpoint create \
   --container-port 8080 \
   --container-port 18789 \
   --disk-size 250Gi \
-  --env "TOKEN_FACTORY_API_KEY=v1.xxx..." \
+  --env "TOKEN_FACTORY_API_KEY={insert your Token Factory API key}" \
   --env "TOKEN_FACTORY_URL=https://api.tokenfactory.nebius.com/v1" \
   --env "INFERENCE_MODEL=zai-org/GLM-5" \
-  --env "OPENCLAW_WEB_PASSWORD=$(openssl rand -hex 16)" \
+  --env "OPENCLAW_WEB_PASSWORD={insert your password}" \
   --public \
   --ssh-key "$(cat ~/.ssh/id_ed25519.pub)"
 ```
@@ -343,7 +343,7 @@ See the [OpenClaw documentation](https://docs.openclaw.ai/channels) for setup gu
 
 ## OpenClaw and NemoClaw: understanding the relationship
 
-A common misconception is that OpenClaw and NemoClaw are competing projects. They're not. [NemoClaw](https://github.com/NVIDIA/NemoClaw) is an NVIDIA-built plugin that **wraps** OpenClaw — it installs on top of OpenClaw and extends it with additional capabilities. Every NemoClaw deployment is an OpenClaw deployment with NVIDIA's plugin layer added.
+[NemoClaw](https://github.com/NVIDIA/NemoClaw) is an NVIDIA-built plugin that **wraps** OpenClaw — it installs on top of OpenClaw and extends it with additional capabilities. Every NemoClaw deployment is an OpenClaw deployment with NVIDIA's plugin layer added.
 
 Think of it this way: OpenClaw is the agent runtime. NemoClaw adds NVIDIA-specific enhancements — sandbox execution for safe code running, enhanced tool orchestration, and advanced agent planning. If OpenClaw is the engine, NemoClaw is the turbocharger.
 
