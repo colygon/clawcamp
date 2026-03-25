@@ -54,6 +54,8 @@ This is the pattern this guide focuses on. It gives you a production-grade, alwa
 
 Deploy OpenClaw alongside a local LLM (via llama.cpp, vLLM, or similar) in a single GPU-powered container. Everything runs inside one endpoint — no external API calls for inference. This is ideal when you need to run a custom fine-tuned model, keep data within a single security boundary, or require deterministic inference behavior.
 
+A key benefit of this approach is **predictable cost**. Instead of variable per-token pricing, you get a fixed hourly rate for the GPU instance — and since it's a serverless endpoint, Nebius can automatically pause it when it's not in use. You only pay for the time the agent is actually running.
+
 For this option, we recommend a GPU preset with sufficient VRAM for your model, or for CPU-only quantized inference, at least 32 vCPUs and 128 GiB RAM. [NemoClaw](https://github.com/NVIDIA/NemoClaw) by NVIDIA is specifically designed for this pattern — bundling agent orchestration with local LLM inference on local GPUs.
 
 ### Comparison
@@ -63,7 +65,7 @@ For this option, we recommend a GPU preset with sufficient VRAM for your model, 
 | **Runs on** | BYO CPU — run OpenClaw anywhere | Nebius CPU endpoint | Nebius GPU endpoint |
 | **Inference** | Token Factory for inference | Token Factory for inference | Local model running on a cloud-hosted GPU |
 | **GPU needed** | No | No | Yes |
-| **Cost model** | Token Factory tokens only | CPU time + tokens | GPU time (all-inclusive) |
+| **Cost model** | Token Factory tokens only | CPU time + tokens | Predictable hourly GPU rate, auto-pauses when idle |
 | **Setup complexity** | Low | Medium | Low |
 | **Best for** | Dev/eval | Production agents | Custom models, air-gapped |
 | **Container image** | N/A (local install) | `openclaw-serverless` | `nemoclaw-serverless` |
