@@ -363,12 +363,6 @@ Think of it this way: OpenClaw is the agent runtime. NemoClaw adds NVIDIA-specif
 
 **NemoClaw is the right choice** when you want to run a local model on NVIDIA GPUs — whether that's a custom fine-tuned model, a model you need to keep within a single security boundary, or a deployment where you want the full stack (agent + inference) in one container. NemoClaw is ideally suited for Option 3: deploying on Nebius GPU endpoints with a local model bundled inside the container.
 
-### Build differences
-
-### Why `node:22` and `--ignore-scripts`?
-
-NemoClaw depends on `@whiskeysockets/baileys`, which requires native build tools (`python3`, `make`, `gcc`) that aren't available in `node:22-slim`. The `--ignore-scripts` flag skips a post-install script that fails inside Docker BuildKit. The plugin works correctly without it.
-
 ### Deploy NemoClaw
 
 **Via install script:**
