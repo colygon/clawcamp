@@ -59,7 +59,9 @@ The container has two processes:
 
 2. **The Health Check** (port 8080) — a lightweight Python HTTP server that responds to Nebius readiness probes. Nebius polls this endpoint and restarts the container if it stops responding.
 
-The entire container runs on `cpu-e2` (Intel Ice Lake) with 2 vCPUs and 8 GiB RAM — the smallest preset Nebius offers.
+The entire container runs on `cpu-e2` (Intel Ice Lake) with 2 vCPUs and 8 GiB RAM — the smallest preset Nebius offers. Even this minimal configuration handles the OpenClaw agent comfortably because the heavy lifting (inference) happens elsewhere.
+
+> **Running with a local model?** If you want to bundle a local LLM (e.g., llama.cpp or vLLM) inside the container instead of using Token Factory, we recommend 32 vCPUs and 128 GiB RAM for quantized models, or a GPU instance for full-precision inference. The architecture described in this guide focuses on the Token Factory approach, which keeps the endpoint lightweight and cost-efficient.
 
 ### Why Token Factory for inference
 
