@@ -140,17 +140,17 @@ Our install scripts detect the region and select the correct platform automatica
 
 ## Prerequisites
 
-The requirements depend on which deployment method you choose:
+All deployment methods require:
 
-| | Console UI | Install Script | Manual CLI | Deploy UI |
-|---|---|---|---|---|
-| **Nebius account** | Required | Required | Required | Required |
-| **Token Factory key** | Required | Required | Required | Required |
-| **Nebius CLI** | Not needed | Required | Required | On the VM |
-| **Docker** | Not needed | Required | Not needed | On the VM |
-| **SSH key** | Optional | Auto-generated | Optional | Auto-generated |
+- A [Nebius AI Cloud](https://console.nebius.com) account
+- A [Token Factory](https://tokenfactory.nebius.com) API key
 
-Get a Token Factory API key at [tokenfactory.nebius.com](https://tokenfactory.nebius.com). Install the Nebius CLI:
+For CLI-based methods, you'll also need:
+
+- The [Nebius CLI](https://docs.nebius.com/cli/install) (install script and manual CLI)
+- [Docker](https://docs.docker.com/get-docker/) (install script only — not needed if using the pre-built public image)
+
+Install the Nebius CLI:
 
 ```bash
 curl -sSL https://storage.ai.nebius.cloud/nebius/install.sh | bash
