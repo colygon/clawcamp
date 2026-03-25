@@ -26,6 +26,8 @@ The inference — the LLM "thinking" part — is delegated to a configurable bac
 
 For teams evaluating agent frameworks, this matters because it decouples your infrastructure decisions from your framework choice. You can start with OpenClaw on the cheapest CPU instance available and scale the inference backend independently.
 
+> **Prefer natural language over CLI?** The [Nebius Skill for Claude Code](https://github.com/colygon/nebius-skill) lets you deploy and manage OpenClaw endpoints conversationally — "deploy an OpenClaw agent in EU North with GLM-5" translates to the right `nebius` CLI commands automatically.
+
 ## Architecture: CPU agent + cloud inference
 
 | Component | Runs on | Port | Purpose |
@@ -498,9 +500,8 @@ Five minutes from now, you could have a production AI agent responding to users 
 - **Try different models** — switch `INFERENCE_MODEL` to `deepseek-ai/DeepSeek-R1-0528` or `MiniMaxAI/MiniMax-M2.5`
 - **Deploy NemoClaw** — use `ghcr.io/colygon/nemoclaw-serverless:latest` for NVIDIA's enhanced agent capabilities
 - **Add channel integrations** — connect Telegram, WhatsApp, Discord, or Signal
-- **Manage with natural language** — use the [Nebius Skill for Claude Code](https://github.com/colygon/nebius-skill) to deploy and manage endpoints via chat
+- **Manage with natural language** — use the [Nebius Skill for Claude Code](https://github.com/colygon/nebius-skill) to deploy and manage endpoints via chat — "list my endpoints," "stop openclaw-v4," "show me the logs"
 - **Go multi-region** — deploy across Finland, Paris, and US for global low-latency coverage
-- **Join the community** — [ClawCamp workshops](https://github.com/colygon/clawcamp) cover deeper dives, NemoClaw, physical robotics, and office hours
 
 All scripts, Docker images, and the Deploy UI are open source: [github.com/colygon/openclaw-deploy](https://github.com/colygon/openclaw-deploy).
 
