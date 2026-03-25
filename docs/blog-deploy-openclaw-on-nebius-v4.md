@@ -28,7 +28,51 @@ For teams evaluating agent frameworks, this matters because it decouples your in
 
 > **Prefer natural language over CLI?** The [Nebius Skill for Claude Code](https://github.com/colygon/nebius-skill) lets you deploy and manage OpenClaw endpoints conversationally — "deploy an OpenClaw agent in EU North with GLM-5" translates to the right `nebius` CLI commands automatically.
 
-## Architecture: CPU agent + cloud inference
+## Three ways to run OpenClaw on Nebius
+
+OpenClaw's separation of agent orchestration from model inference gives you flexibility in how you deploy. Nebius supports all three patterns:
+
+### Option 1: OpenClaw + Token Factory (anywhere)
+
+**Best for:** Getting started, development, evaluation
+
+Run OpenClaw on any machine — your laptop, a VM, a Raspberry Pi — and point it at [Token Factory](https://tokenfactory.nebius.com) for inference. No container, no cloud endpoint. Just install OpenClaw, configure a Token Factory API key, and start chatting.
+
+This is the simplest path. You pay only for Token Factory inference tokens. The agent runs wherever Node.js runs.
+
+### Option 2: OpenClaw on Nebius Serverless CPU + Token Factory
+
+**Best for:** Production deployments, always-on agents, multi-channel bots
+
+Deploy OpenClaw as a containerized serverless endpoint on Nebius using a lightweight CPU instance (2 vCPUs, 8 GiB RAM). The agent handles orchestration, sessions, and channel integrations. Token Factory provides the inference. You pay per-second for the CPU instance plus per-token for inference.
+
+This is the pattern this guide focuses on. It gives you a production-grade, always-available agent with WebSocket connectivity, a Control UI dashboard, health monitoring, and channel integrations — all running on the cheapest instance Nebius offers. The heavy lifting (GPU inference) is handled by Token Factory's managed infrastructure.
+
+### Option 3: OpenClaw on Nebius Serverless GPU — self-contained
+
+**Best for:** Custom-trained models, data privacy requirements, maximum control
+
+Deploy OpenClaw alongside a local LLM (via llama.cpp, vLLM, or similar) in a single GPU-powered container. Everything runs inside one endpoint — no external API calls for inference. This is ideal when you need to run a custom fine-tuned model, keep data within a single security boundary, or require deterministic inference behavior.
+
+For this option, we recommend a GPU preset with sufficient VRAM for your model, or for CPU-only quantized inference, at least 32 vCPUs and 128 GiB RAM. [NemoClaw](https://github.com/NVIDIA/NemoClaw) by NVIDIA is specifically designed for this pattern — bundling agent orchestration with local LLM inference on local GPUs.
+
+### Comparison
+
+| | Option 1 | Option 2 | Option 3 |
+|---|---|---|---|
+| **Runs on** | Any machine | Nebius CPU endpoint | Nebius GPU endpoint |
+| **Inference** | Token Factory API | Token Factory API | Local model (llama.cpp, vLLM) |
+| **GPU needed** | No | No | Yes |
+| **Cost model** | Token Factory tokens only | CPU time + tokens | GPU time (all-inclusive) |
+| **Setup complexity** | Minimal | Low | Medium |
+| **Best for** | Dev/eval | Production agents | Custom models, air-gapped |
+| **Container image** | N/A (local install) | `openclaw-serverless` | Custom (bundle model + runtime) |
+
+---
+
+## Architecture: Option 2 in detail
+
+The rest of this guide covers **Option 2** — the CPU serverless endpoint with Token Factory inference. Here's what the deployment looks like:
 
 | Component | Runs on | Port | Purpose |
 |-----------|---------|------|---------|
@@ -61,9 +105,7 @@ The container has two processes:
 
 2. **The Health Check** (port 8080) — a lightweight Python HTTP server that responds to Nebius readiness probes. Nebius polls this endpoint and restarts the container if it stops responding.
 
-The entire container runs on `cpu-e2` (Intel Ice Lake) with 2 vCPUs and 8 GiB RAM — the smallest preset Nebius offers. Even this minimal configuration handles the OpenClaw agent comfortably because the heavy lifting (inference) happens elsewhere.
-
-> **Running with a local model?** Nebius serverless endpoints also support GPU presets. You can deploy a GPU instance with a local LLM (llama.cpp, vLLM) bundled in the same container. For CPU-only local inference with quantized models, we recommend 32 vCPUs and 128 GiB RAM. [NemoClaw](https://github.com/NVIDIA/NemoClaw) by NVIDIA is specifically designed for this pattern — running with local LLMs on local GPUs for full self-contained deployments. This guide focuses on the Token Factory approach, which keeps the endpoint lightweight and cost-efficient by separating inference from orchestration.
+Even the smallest CPU preset (2 vCPUs, 8 GiB RAM) handles OpenClaw comfortably because all inference is offloaded to Token Factory.
 
 ### Why Token Factory for inference
 
