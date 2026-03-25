@@ -12,7 +12,7 @@
 
 Agent demo apps work great on your laptop. You pick a model, wire up some tools, test a few prompts, and everything works. Then you try to ship it to real users, and a different set of problems shows up: GPU provisioning, container orchestration, model weight management, WebSocket networking, secret rotation, and health monitoring. And then there's keeping the whole thing running at 3 AM when a user in another timezone sends a message.
 
-Most teams hit the same wall. The agent logic is maybe 20% of the work. The other 80% is infrastructure — and it's the part nobody planned for.
+Most teams hit the same wall. The agent logic is maybe 20% of the work. The other 80% is infrastructure — and it's the part nobody planned for. (Nebius covers this gap well in their guide to [launching production-grade agents at scale](https://nebius.com/blog/posts/launch-production-agents-at-scale).)
 
 This guide covers how to eliminate most of that infrastructure burden. We'll deploy [OpenClaw](https://openclaw.ai) agents on [Nebius AI Cloud](https://nebius.com/ai-cloud) serverless endpoints, walk through four deployment methods (console UI, install scripts, CLI, and a web-based Deploy UI), cover the NemoClaw NVIDIA variant, and document every failure mode we encountered along the way.
 
@@ -22,7 +22,7 @@ OpenClaw is an open-source AI agent platform with a distinctive architecture: it
 
 The OpenClaw Gateway handles everything except thinking. That includes WebSocket communication, channel integrations (Telegram, WhatsApp, Discord, Signal, iMessage), session management, cron scheduling, tool execution, and a web-based Control UI dashboard.
 
-The inference — the LLM "thinking" part — is delegated to a configurable backend. This is the key insight that makes serverless CPU deployment possible. The agent runtime runs on a lightweight CPU instance. The heavy computation happens elsewhere, on purpose-built GPU infrastructure — on purpose.
+The inference — the LLM "thinking" part — is delegated to a configurable backend. This is the key insight that makes serverless CPU deployment possible. The agent runtime runs on a lightweight CPU instance. The heavy computation happens elsewhere, on [purpose-built GPU infrastructure](https://nebius.com/blog/posts/what-is-ai-cloud) — on purpose.
 
 For teams evaluating agent frameworks, this matters because it decouples your infrastructure decisions from your framework choice. You can start with OpenClaw on the cheapest CPU instance available and scale the inference backend independently.
 
@@ -64,9 +64,9 @@ For this option, we recommend a GPU preset with sufficient VRAM for your model, 
 | **Inference** | Token Factory for inference | Token Factory for inference | Local model running on a cloud-hosted GPU |
 | **GPU needed** | No | No | Yes |
 | **Cost model** | Token Factory tokens only | CPU time + tokens | GPU time (all-inclusive) |
-| **Setup complexity** | Minimal | Low | Medium |
+| **Setup complexity** | Low | Medium | Low |
 | **Best for** | Dev/eval | Production agents | Custom models, air-gapped |
-| **Container image** | N/A (local install) | `openclaw-serverless` | Custom (bundle model + runtime) |
+| **Container image** | N/A (local install) | `openclaw-serverless` | `nemoclaw-serverless` |
 
 ---
 
@@ -109,7 +109,7 @@ Even the smallest CPU preset (2 vCPUs, 8 GiB RAM) handles OpenClaw comfortably b
 
 ### Why Token Factory for inference
 
-[Token Factory](https://tokenfactory.nebius.com) provides an OpenAI-compatible API backed by Nebius GPU clusters. Instead of provisioning GPU instances, you make API calls. Token Factory handles model loading, batching, scaling, and the underlying hardware — you pay per token.
+[Token Factory](https://tokenfactory.nebius.com) provides an [OpenAI-compatible API](https://nebius.com/blog/posts/launch-production-agents-at-scale) backed by Nebius GPU clusters, with access to more than 30 open-source models. Instead of provisioning GPU instances, you make API calls. Token Factory handles model loading, batching, scaling, and the underlying hardware — you pay per token.
 
 For agent workloads, this is a natural fit. Agent orchestration is CPU-bound (routing messages, managing sessions, executing tools). Inference is GPU-bound but bursty — you need it when the agent "thinks," not continuously, where bursts of inference are separated by idle periods. Paying per token instead of reserving GPU instances can reduce costs significantly for this traffic pattern.
 
@@ -510,7 +510,7 @@ ssh nebius@<ip> "sudo docker exec \$(sudo docker ps -q | head -1) \
 
 ## Production deployment checklist
 
-Before going live:
+Before going live, review the [OpenClaw security architecture and hardening guide](https://nebius.com/blog/posts/openclaw-security) for a thorough threat model. Then work through this checklist:
 
 - [ ] **Token Factory API key** stored in MysteryBox (not hardcoded)
 - [ ] **Gateway token** set in both config file and `OPENCLAW_WEB_PASSWORD` env var
@@ -541,6 +541,7 @@ Five minutes from now, you could have a production AI agent responding to users 
 
 - **Try different models** — switch `INFERENCE_MODEL` to `deepseek-ai/DeepSeek-R1-0528` or `MiniMaxAI/MiniMax-M2.5`
 - **Deploy NemoClaw** — use `ghcr.io/colygon/nemoclaw-serverless:latest` for NVIDIA's enhanced agent capabilities
+- **Add human-in-the-loop verification** — use [Tendem](https://nebius.com/blog/posts/nebius-and-toloka-to-introduce-integration-to-bring-human-experts-on-demand-to-ai-agents) to add human expert verification for high-stakes agent decisions via MCP
 - **Add channel integrations** — connect Telegram, WhatsApp, Discord, or Signal
 - **Manage with natural language** — use the [Nebius Skill for Claude Code](https://github.com/colygon/nebius-skill) to deploy and manage endpoints via chat — "list my endpoints," "stop openclaw-v4," "show me the logs"
 - **Go multi-region** — deploy across Finland, Paris, and US for global low-latency coverage
@@ -549,4 +550,4 @@ All scripts, Docker images, and the Deploy UI are open source: [github.com/colyg
 
 ---
 
-*[Nebius AI Cloud](https://nebius.com/ai-cloud) provides scalable infrastructure for AI workloads. [Token Factory](https://tokenfactory.nebius.com) offers GPU-backed inference without hardware management. Together, they handle the 80% of agent deployment that isn't agent logic.*
+*[Nebius AI Cloud](https://nebius.com/ai-cloud) provides purpose-built infrastructure for AI workloads. [Token Factory](https://tokenfactory.nebius.com) offers GPU-backed inference without hardware management. Together with [Tendem for human verification](https://nebius.com/blog/posts/nebius-and-toloka-to-introduce-integration-to-bring-human-experts-on-demand-to-ai-agents) and ecosystem integrations, they form a complete stack for production agent deployment.*
