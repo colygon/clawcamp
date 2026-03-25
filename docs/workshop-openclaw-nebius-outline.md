@@ -109,7 +109,10 @@ Deploy the same OpenClaw container on a Nebius serverless endpoint (2 vCPUs, 8 G
 - OpenClaw TUI (terminal interface) via SSH tunnel
 - Control UI dashboard — sessions, usage, cron jobs, live chat
 - Device pairing — the security model and how to approve new clients
-- Channel integrations — Telegram, WhatsApp, Discord, Signal
+- **Telegram** — connect your agent to a Telegram bot for group and DM conversations
+- **WhatsApp** — integrate with WhatsApp Business API for customer-facing agents
+- **Discord** — add your agent as a Discord bot in any server
+- **Signal** — private, encrypted messaging with your agent
 
 ### Production Hardening
 - Secrets management with Nebius MysteryBox
