@@ -14,10 +14,10 @@
 
 By the end of this workshop, you'll have:
 
-- A **production-ready AI agent** running on Nebius Cloud — accessible via terminal, web dashboard, and messaging channels
-- A **Token Factory-powered agent** on a CPU serverless endpoint — no GPU management, pay per token
+- A **local OpenClaw agent** running in Docker on your own machine — connected to Token Factory for inference in under 2 minutes
+- A **production cloud agent** on a Nebius CPU serverless endpoint — always-on, public IP, health monitoring, pay per second
 - A **self-contained GPU deployment** with a local model running inside the container — predictable cost, auto-pauses when idle
-- The **scripts, Docker images, and configuration** to replicate both approaches in your own projects
+- The **scripts, Docker images, and configuration** to replicate all three approaches in your own projects
 
 > *"I deployed an agent with tool calling in under 30 minutes — and it costs pennies per run"*
 
@@ -29,25 +29,39 @@ Your agent works perfectly on localhost. Shipping it to production is a differen
 
 GPU provisioning. Container orchestration. WebSocket networking. Secret management. Health monitoring. Keeping everything alive at 3 AM when a user in another timezone sends a message. The agent logic is maybe 20% of the work. The other 80% is infrastructure — and it's the part nobody planned for.
 
-This workshop eliminates that 80%. You'll deploy OpenClaw AI agents on Nebius Cloud using two battle-tested approaches, and walk away knowing exactly which one fits your use case.
+This workshop eliminates that 80%. You'll see three ways to deploy OpenClaw AI agents — from running locally on your laptop to a fully self-contained GPU deployment in the cloud — and walk away knowing exactly which one fits your use case.
 
 ---
 
-## Two Deployment Paths
+## Three Deployment Paths
 
-### Path 1: CPU Serverless + Token Factory
-*Cheapest. Simplest. Best for most agent workloads.*
+### Path 1: OpenClaw Locally + Token Factory
+*Fastest to start. Zero cloud setup. Run OpenClaw anywhere.*
 
-Deploy a lightweight OpenClaw container on the smallest CPU instance Nebius offers (2 vCPUs, 8 GiB RAM). All inference is handled by Token Factory — Nebius's managed GPU inference API with 30+ open-source models. You pay per token for inference, per second for the CPU instance.
+Run OpenClaw in Docker on your own machine (laptop, VPS, Raspberry Pi — anything with a CPU). All inference is handled by Token Factory, so you don't need a GPU locally. This is the quickest way to get an agent running and experiment with models.
 
-**Use when:** You want a production agent without managing GPUs, model weights, or inference infrastructure.
+```bash
+docker run -e TOKEN_FACTORY_API_KEY=your-key \
+  -e INFERENCE_MODEL=zai-org/GLM-5 \
+  -p 8080:8080 -p 18789:18789 \
+  ghcr.io/colygon/openclaw-serverless:latest
+```
 
-### Path 2: GPU Serverless + Local Model
+**Use when:** You're prototyping, developing locally, or want to run an agent on your own hardware without any cloud infrastructure.
+
+### Path 2: Nebius CPU Serverless + Token Factory
+*Production-ready. Always-on. Cheapest cloud deployment.*
+
+Deploy the same OpenClaw container on a Nebius serverless endpoint (2 vCPUs, 8 GiB RAM). Token Factory handles inference. You get a public IP, health monitoring, SSH access, start/stop lifecycle, and per-second billing. The endpoint stays running so your agent is always reachable.
+
+**Use when:** You want a production agent accessible 24/7 without managing servers, GPUs, or model weights.
+
+### Path 3: Nebius GPU Serverless + Local Model
 *Self-contained. Private. Predictable cost.*
 
-Deploy NemoClaw (NVIDIA's OpenClaw plugin) with a local LLM bundled inside a GPU-powered container. Everything runs in one endpoint — no external API calls. The serverless endpoint auto-pauses when idle, so you only pay for active time.
+Deploy NemoClaw (NVIDIA's OpenClaw plugin) with a local LLM running on a cloud-hosted GPU. Everything runs in one container — no external API calls. The serverless endpoint auto-pauses when idle, so you only pay for active time. Ideal for custom fine-tuned models or when data must stay within a single security boundary.
 
-**Use when:** You need a custom fine-tuned model, want data to stay within a single security boundary, or prefer a fixed hourly rate over per-token pricing.
+**Use when:** You need a custom-trained model, want all inference to stay inside your container, or prefer a predictable hourly rate over per-token pricing.
 
 ---
 
@@ -65,6 +79,7 @@ Deploy NemoClaw (NVIDIA's OpenClaw plugin) with a local LLM bundled inside a GPU
 - Cost and latency optimization for bursty agent traffic
 
 ### Deployment (Live Demos)
+- **Local Docker** — run OpenClaw on your laptop with `docker run` + Token Factory
 - **Console deployment** — point-and-click in the Nebius web UI, no CLI required
 - **One-command CLI** — `./install-openclaw-serverless.sh` handles everything
 - **Pre-built images** — `ghcr.io/colygon/openclaw-serverless:latest` (no Docker build needed)
@@ -88,9 +103,10 @@ Deploy NemoClaw (NVIDIA's OpenClaw plugin) with a local LLM bundled inside a GPU
 
 | Time | Section | Speaker | What Happens |
 |------|---------|---------|-------------|
-| 0:00 | **The Production Problem** | Colin | Why agent demos break when you ship them. Three deployment options explained. |
-| 0:10 | **Deploy with Token Factory** | Colin | Live demo: Console deploy → CLI deploy → connect via TUI and dashboard. Switch models live. |
-| 0:30 | **Deploy with Custom Model on GPU** | Mikhail | Live demo: NemoClaw + GPU endpoint. Local inference, auto-pause, serverless billing. |
+| 0:00 | **The Production Problem** | Colin | Why agent demos break when you ship them. Three deployment paths explained. |
+| 0:05 | **Path 1: Run Locally + Token Factory** | Colin | Live demo: `docker run` on your laptop with Token Factory for inference. Fastest way to start. |
+| 0:15 | **Path 2: Nebius CPU Serverless** | Colin | Live demo: Console deploy → CLI deploy → connect via TUI and dashboard. Switch models live. |
+| 0:30 | **Path 3: GPU Serverless + Custom Model** | Mikhail | Live demo: NemoClaw + GPU endpoint. Local inference, auto-pause, serverless billing. |
 | 0:50 | **Production Tips & Gotchas** | Colin | MysteryBox secrets, gateway tokens, failure modes, and the deployment checklist. |
 | 0:55 | **Q&A** | Both | Open questions, debugging, and next steps. |
 
