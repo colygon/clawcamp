@@ -63,7 +63,7 @@ The container has two processes:
 
 The entire container runs on `cpu-e2` (Intel Ice Lake) with 2 vCPUs and 8 GiB RAM — the smallest preset Nebius offers. Even this minimal configuration handles the OpenClaw agent comfortably because the heavy lifting (inference) happens elsewhere.
 
-> **Running with a local model?** Nebius serverless endpoints also support GPU presets. You can deploy a GPU instance with a local LLM (llama.cpp, vLLM) bundled in the same container — this is the approach RunPod's [openclaw-stack](https://www.runpod.io/console/deploy?template=openclaw-stack) template uses. For CPU-only local inference with quantized models, we recommend 32 vCPUs and 128 GiB RAM. [NemoClaw](https://github.com/NVIDIA/NemoClaw) by NVIDIA is specifically designed for this pattern — running with local LLMs on local GPUs for full self-contained deployments. This guide focuses on the Token Factory approach, which keeps the endpoint lightweight and cost-efficient by separating inference from orchestration.
+> **Running with a local model?** Nebius serverless endpoints also support GPU presets. You can deploy a GPU instance with a local LLM (llama.cpp, vLLM) bundled in the same container. For CPU-only local inference with quantized models, we recommend 32 vCPUs and 128 GiB RAM. [NemoClaw](https://github.com/NVIDIA/NemoClaw) by NVIDIA is specifically designed for this pattern — running with local LLMs on local GPUs for full self-contained deployments. This guide focuses on the Token Factory approach, which keeps the endpoint lightweight and cost-efficient by separating inference from orchestration.
 
 ### Why Token Factory for inference
 
