@@ -14,7 +14,17 @@ Agent demo apps work great on your laptop. You pick a model, wire up some tools,
 
 Most teams hit the same wall. The agent logic is maybe 20% of the work. The other 80% is infrastructure — and it's the part nobody planned for. (Nebius covers this gap well in their guide to [launching production-grade agents at scale](https://nebius.com/blog/posts/launch-production-agents-at-scale).)
 
-This guide covers how to eliminate most of that infrastructure burden. We'll deploy [OpenClaw](https://openclaw.ai) agents on [Nebius AI Cloud](https://nebius.com/ai-cloud) serverless endpoints, walk through four deployment methods (console UI, install scripts, CLI, and a web-based Deploy UI), cover the NemoClaw NVIDIA variant, and document every failure mode we encountered along the way.
+This guide covers how to eliminate most of that infrastructure burden. We'll deploy [OpenClaw](https://openclaw.ai) agents on [Nebius AI Cloud](https://nebius.com/ai-cloud) serverless endpoints, walk through five deployment methods, cover the NemoClaw NVIDIA variant, and document every failure mode we encountered along the way.
+
+### Get started now
+
+If you want to skip straight to deploying:
+
+1. [Create a Token Factory API key](https://tokenfactory.nebius.com)
+2. [Open the Nebius console](https://console.nebius.com) and deploy using `ghcr.io/colygon/openclaw-serverless:latest`
+3. Or run `./install-openclaw-serverless.sh` from [our repo](https://github.com/colygon/openclaw-deploy) for the automated path
+
+The rest of this guide explains what's happening under the hood, the different deployment options, and how to avoid the pitfalls we hit along the way.
 
 ## What is OpenClaw?
 
@@ -556,18 +566,10 @@ Before going live, review the [OpenClaw security architecture and hardening guid
 
 ## What's next
 
-Five minutes from now, you could have a production AI agent responding to users across Telegram, Discord, and the web — running entirely on CPU with cloud-powered inference.
-
-**Get started:**
-
-1. [Create a Token Factory API key](https://tokenfactory.nebius.com)
-2. [Open the Nebius console](https://console.nebius.com) and deploy using `ghcr.io/colygon/openclaw-serverless:latest`
-3. Or run `./install-openclaw-serverless.sh` for the automated path
-
-**Go further:**
+With your agent running, here's where to go from here:
 
 - **Try different models** — switch `INFERENCE_MODEL` to `deepseek-ai/DeepSeek-R1-0528` or `MiniMaxAI/MiniMax-M2.5`
-- **Deploy NemoClaw** — use `ghcr.io/colygon/nemoclaw-serverless:latest` for NVIDIA's enhanced agent capabilities
+- **Deploy NemoClaw** — use `ghcr.io/colygon/nemoclaw-serverless:latest` for NVIDIA's enhanced agent capabilities on GPU endpoints
 - **Add human-in-the-loop verification** — use [Tendem](https://nebius.com/blog/posts/nebius-and-toloka-to-introduce-integration-to-bring-human-experts-on-demand-to-ai-agents) to add human expert verification for high-stakes agent decisions via MCP
 - **Add channel integrations** — connect Telegram, WhatsApp, Discord, or Signal
 - **Manage with natural language** — use the [Nebius Skill for Claude Code](https://github.com/colygon/nebius-skill) to deploy and manage endpoints via chat — "list my endpoints," "stop openclaw-v4," "show me the logs"
