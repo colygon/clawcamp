@@ -160,7 +160,7 @@ Don't have everything set up? No worries — you can follow along with the live 
 
 ## Your Speakers
 
-**Colin Lowenberg** — Builder and community organizer behind ClawCamp. Built the OpenClaw Deploy UI, install scripts, and Nebius Skill for Claude Code. Has deployed dozens of OpenClaw agents on Nebius and documented every failure mode along the way.
+**Colin Lowenberg** — Developer Advocate at Nebius. Built the OpenClaw Deploy UI, install scripts, and Nebius Skill for Claude Code. Has deployed dozens of OpenClaw agents on Nebius and documented every failure mode along the way.
 
 **Mikhail Rozhkov** — Nebius. Expert on Nebius serverless infrastructure, GPU deployments, and production AI workloads. Will demo deploying NemoClaw with a custom model on GPU endpoints and cover Nebius serverless features.
 
