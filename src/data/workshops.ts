@@ -42,10 +42,204 @@ export interface GuideStep {
 
 export const workshops: Workshop[] = [
   {
+    slug: "local-install",
+    badge: "Workshop",
+    badgeColor: "badge-lime",
+    title: "Install OpenClaw + Token Factory — Your First AI Agent",
+    subtitle: "From Zero to Running Agent in 5 Minutes. No Cloud, No GPU, No Docker.",
+    tagline:
+      "Install OpenClaw with npm, connect to Token Factory for inference, and have a working AI agent in under 5 minutes.",
+    description:
+      "Install OpenClaw directly on your machine — no Docker, no cloud accounts, no infrastructure. Connect it to Token Factory for GPU-powered inference and have a running AI agent in minutes. This is the fastest path from zero to a working agent, and the foundation for every other deployment path.",
+    audience: "Anyone curious about AI agents — developers, founders, students",
+    level: "Beginner",
+    levelColor: "level-green",
+    keyValue:
+      "A running AI agent on your machine in under 5 minutes",
+    wowFactor:
+      '"I went from nothing to chatting with my own AI agent in 5 minutes — and it can use tools"',
+    icon: "shield",
+    whatYouBuild: [
+      "An OpenClaw agent running locally on your machine",
+      "Connected to Token Factory for GPU-powered inference (no local GPU needed)",
+      "Access via the Control UI dashboard and terminal TUI",
+    ],
+    whatWeCover: [
+      "What is OpenClaw: open-source AI agent platform with WebSocket gateway, channels, sessions, and tools",
+      "What is Token Factory: Nebius managed inference API with 30+ open-source models",
+      "Installing OpenClaw via npm — one command, no containers",
+      "Configuring Token Factory: API key, model selection, and the OpenAI-compatible API",
+      "Connecting via the dashboard (http://localhost:18789) and the TUI",
+      "Choosing models: GLM-5, DeepSeek-R1, MiniMax-M2.5 — tradeoffs explained",
+    ],
+    whoIsThisFor:
+      "Anyone who wants to try OpenClaw for the first time. No cloud experience needed, no GPU needed, no Docker needed — just a laptop with Node.js. This is the recommended starting point before moving to Docker or cloud deployments.",
+    prerequisites: [
+      "Laptop with Node.js 18+ installed",
+      "A Token Factory API key (sign up at tokenfactory.nebius.com)",
+      "Basic comfort with the terminal",
+    ],
+    youLeaveWith: [
+      "OpenClaw installed and running on your machine",
+      "A Token Factory API key configured for inference",
+      "The Control UI dashboard open in your browser",
+      "An understanding of how OpenClaw separates orchestration from inference",
+      "Confidence to move to Docker (Path 2) or Nebius Cloud (Paths 3–4)",
+    ],
+    schedule: [
+      {
+        time: "0:00 – 0:10",
+        title: "What is OpenClaw?",
+        description:
+          "Introduction to OpenClaw and how it separates agent orchestration from model inference",
+        details: [
+          "The agent platform: gateway, sessions, channels, tools, cron, Control UI",
+          "Why you don't need a GPU: Token Factory handles inference",
+          "The four deployment paths — this workshop covers Path 1 (local install)",
+        ],
+      },
+      {
+        time: "0:10 – 0:25",
+        title: "Install & Configure",
+        description:
+          "Install OpenClaw, get a Token Factory key, and start the gateway",
+        details: [
+          "npm install -g openclaw",
+          "Get a Token Factory API key at tokenfactory.nebius.com",
+          "Set environment variables: TOKEN_FACTORY_API_KEY, TOKEN_FACTORY_URL, INFERENCE_MODEL",
+          "openclaw init → openclaw gateway --bind loopback --auth token",
+          "Verify: open http://localhost:18789 in your browser",
+        ],
+      },
+      {
+        time: "0:25 – 0:40",
+        title: "Talk to Your Agent",
+        description:
+          "Connect via dashboard and TUI, try different models, explore the Control UI",
+        details: [
+          "Send your first message via the Control UI dashboard",
+          "Connect via the TUI: openclaw tui",
+          "Switch models live: GLM-5 → DeepSeek-R1 → MiniMax-M2.5",
+          "Explore sessions, usage stats, and cron jobs in the dashboard",
+        ],
+      },
+      {
+        time: "0:40 – 0:55",
+        title: "Connect Channels & Next Steps",
+        description:
+          "Add Telegram/Discord/WhatsApp and preview the other deployment paths",
+        details: [
+          "Connect a Telegram bot to your agent",
+          "Preview: Path 2 (Docker), Path 3 (GPU serverless), Path 4 (CPU serverless)",
+          "When to upgrade: production needs, always-on, custom models",
+          "Q&A",
+        ],
+      },
+    ],
+    guideSteps: [
+      {
+        stepNumber: 1,
+        title: "Get a Token Factory API Key",
+        duration: "2 min",
+        overview:
+          "Sign up for Token Factory and create an API key for GPU-powered inference.",
+        instructions: [
+          "Go to tokenfactory.nebius.com and sign up (or log in)",
+          "Navigate to API Keys and create a new key",
+          "Copy the key — you'll need it in the next step",
+        ],
+        commands: [
+          "# No commands needed — this is done in the browser",
+          "# Save your key somewhere safe (you'll export it as an env var next)",
+        ],
+        tips: [
+          "Token Factory offers 30+ open-source models including GLM-5, DeepSeek-R1, and MiniMax-M2.5",
+          "You pay per token — no GPU reservation needed",
+        ],
+        checkpoint: "You have a Token Factory API key starting with 'v1.'",
+      },
+      {
+        stepNumber: 2,
+        title: "Install OpenClaw",
+        duration: "1 min",
+        overview:
+          "Install OpenClaw globally via npm.",
+        instructions: [
+          "Open your terminal",
+          "Run npm install -g openclaw",
+          "Verify the install with openclaw --version",
+        ],
+        commands: [
+          "npm install -g openclaw",
+          "",
+          "# Verify",
+          "openclaw --version",
+        ],
+        tips: [
+          "Requires Node.js 18 or higher",
+          "If you get a permissions error, try: sudo npm install -g openclaw",
+        ],
+        checkpoint: "Running 'openclaw --version' prints the version number",
+      },
+      {
+        stepNumber: 3,
+        title: "Configure & Start the Gateway",
+        duration: "2 min",
+        overview:
+          "Set your Token Factory credentials, initialize OpenClaw, and start the gateway.",
+        instructions: [
+          "Export your Token Factory API key and URL as environment variables",
+          "Set the inference model (we'll use GLM-5)",
+          "Set a gateway password for authentication",
+          "Initialize OpenClaw and start the gateway",
+        ],
+        commands: [
+          "export TOKEN_FACTORY_API_KEY={your-token-factory-key}",
+          "export TOKEN_FACTORY_URL=https://api.tokenfactory.nebius.com/v1",
+          "export INFERENCE_MODEL=zai-org/GLM-5",
+          "export OPENCLAW_GATEWAY_TOKEN={your-password}",
+          "",
+          "openclaw init",
+          "openclaw gateway --bind loopback --auth token --token $OPENCLAW_GATEWAY_TOKEN",
+        ],
+        tips: [
+          "Model IDs use Token Factory format: zai-org/GLM-5 (not HuggingFace format like THUDM/GLM-4-9B-0414)",
+          "The --bind loopback flag keeps the gateway accessible only from your machine",
+        ],
+        checkpoint: "Terminal shows 'listening on ws://127.0.0.1:18789'",
+      },
+      {
+        stepNumber: 4,
+        title: "Connect to Your Agent",
+        duration: "2 min",
+        overview:
+          "Open the Control UI dashboard and send your first message.",
+        instructions: [
+          "Open http://localhost:18789/#token={your-password} in your browser",
+          "You should see the OpenClaw Control UI dashboard",
+          "Type a message and press Enter — the agent will respond using GLM-5 via Token Factory",
+          "Or connect via TUI: openclaw tui --url ws://localhost:18789 --token {your-password}",
+        ],
+        commands: [
+          "# Open in browser",
+          "open http://localhost:18789",
+          "",
+          "# Or connect via TUI (in a new terminal)",
+          "openclaw tui --url ws://localhost:18789 --token {your-password}",
+        ],
+        tips: [
+          "The dashboard shows sessions, usage, cron jobs, and agent settings",
+          "Try switching models: change INFERENCE_MODEL to deepseek-ai/DeepSeek-R1-0528 and restart the gateway",
+        ],
+        checkpoint: "You received a response from your agent",
+      },
+    ],
+  },
+  {
     slug: "agent-inference",
     badge: "Workshop",
     badgeColor: "badge-lime",
-    title: "OpenClaw + Token Factory — Agent-Grade Inference",
+    title: "Nebius Serverless + Token Factory — Production Agent Deployment",
     subtitle: "Open Models. Structured Outputs. Production-Ready Tool Calling.",
     tagline:
       "Deploy OpenClaw on Nebius Serverless, connect to Token Factory, and build agents that actually work.",
