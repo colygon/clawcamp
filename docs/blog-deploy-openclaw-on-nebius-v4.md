@@ -61,7 +61,7 @@ For this option, we recommend a GPU preset with sufficient VRAM for your model, 
 | | Option 1 | Option 2 | Option 3 |
 |---|---|---|---|
 | **Runs on** | Any machine | Nebius CPU endpoint | Nebius GPU endpoint |
-| **Inference** | Token Factory API | Token Factory API | Local model (llama.cpp, vLLM) |
+| **Inference** | Token Factory API | Token Factory API | Local model running on a cloud-hosted GPU |
 | **GPU needed** | No | No | Yes |
 | **Cost model** | Token Factory tokens only | CPU time + tokens | GPU time (all-inclusive) |
 | **Setup complexity** | Minimal | Low | Medium |
