@@ -41,8 +41,10 @@ This workshop eliminates that 80%. You'll see three ways to deploy OpenClaw AI a
 Run OpenClaw in Docker on your own machine (laptop, VPS, Raspberry Pi — anything with a CPU). All inference is handled by Token Factory, so you don't need a GPU locally. This is the quickest way to get an agent running and experiment with models.
 
 ```bash
-docker run -e TOKEN_FACTORY_API_KEY=your-key \
+docker run -e TOKEN_FACTORY_API_KEY={your-token-factory-key} \
+  -e TOKEN_FACTORY_URL=https://api.tokenfactory.nebius.com/v1 \
   -e INFERENCE_MODEL=zai-org/GLM-5 \
+  -e OPENCLAW_WEB_PASSWORD={your-password} \
   -p 8080:8080 -p 18789:18789 \
   ghcr.io/colygon/openclaw-serverless:latest
 ```
