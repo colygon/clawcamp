@@ -274,6 +274,26 @@ cd openclaw-deploy
 
 This installs Node.js, the Nebius CLI, nginx with HTTPS, and configures a systemd service on a Nebius VM. The UI is then accessible at `https://<vm-ip>`.
 
+### Method 5: Nebius Skill for Claude Code
+
+If you use [Claude Code](https://claude.ai/claude-code), the [Nebius Skill](https://github.com/colygon/nebius-skill) lets you deploy and manage endpoints entirely through natural language:
+
+```
+> Deploy an OpenClaw agent in EU North with GLM-5
+```
+
+Claude Code translates this into the correct `nebius` CLI commands — creating the endpoint with the right platform, ports, environment variables, and SSH key. No need to remember flags or look up region-to-platform mappings.
+
+You can also manage running endpoints conversationally:
+
+```
+> List my running endpoints
+> Stop the openclaw-agent endpoint
+> Show me the gateway logs for nemoclaw-serverless
+```
+
+Install the skill by cloning [github.com/colygon/nebius-skill](https://github.com/colygon/nebius-skill) and adding it to your Claude Code configuration. The Nebius CLI must be installed and authenticated on the same machine.
+
 ---
 
 ## Connecting to your agent
